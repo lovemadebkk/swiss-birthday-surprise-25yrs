@@ -237,6 +237,16 @@
     -webkit-tap-highlight-color: transparent;
   }
   .btn-continue:active { transform: scale(0.94); }
+  .btn-pray {
+    background: linear-gradient(135deg, #ffe9c9, #fff6e6);
+    font-size: 15px;
+    padding: 14px 26px;
+    animation: prayPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes prayPulse {
+    0%, 100% { box-shadow: 0 10px 22px rgba(51,82,107,0.16); }
+    50% { box-shadow: 0 10px 26px rgba(230,180,90,0.35); }
+  }
 
   /* ---------- page transition ---------- */
   .fading-out { animation: fadeOutSlide 480ms ease forwards; }
@@ -560,7 +570,7 @@
       <div class="mini-heart">💗</div>
       <p class="wish-text">ไม่ว่าจะเจอเรื่องอะไร<br>เค้าก็จะอยู่ข้างเทอนะ<br><strong>fr 💗</strong></p>
       <div class="book-decor">🫶🏻 💗 ✨</div>
-      <button class="btn-continue" id="toPage3">ไปต่ออีกนิด → 💌</button>
+      <button class="btn-continue btn-pray" id="toPage3">🙏 สาธุ ขอให้เป็นจริง</button>
     </div>
 
     <!-- ปุ่มควบคุม -->
@@ -587,20 +597,20 @@
     <img class="mascot" alt="เพนกวิ้นเพื่อนซี้"
       src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 170'%3E%3Cellipse cx='80' cy='120' rx='58' ry='44' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='128' rx='38' ry='30' fill='%23ffffff'/%3E%3Ccircle cx='80' cy='58' r='46' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='66' rx='30' ry='26' fill='%23ffffff'/%3E%3Cpath d='M58,54 Q66,47 74,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M86,54 Q94,47 102,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M72 66 L80 74 L88 66 Z' fill='%23e3a04f'/%3E%3Cellipse cx='55' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='105' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='34' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(18 34 118)'/%3E%3Cellipse cx='126' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(-18 126 118)'/%3E%3Cellipse cx='60' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3Cellipse cx='100' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3C/svg%3E">
 
-    <p class="rank-title">ถ้าเลือกได้<br>อยากให้เค้าทำอะไรให้เทอมากที่สุด?</p>
-    <p class="rank-sub">กดค้างที่ ☰ แล้วลาก เพื่อจัดอันดับ (มาก → น้อย) 💗</p>
+    <p class="rank-title">ถ้าเลือกได้<br>เทอชอบให้เค้าทำอะไรให้เทอมากที่สุด?</p>
+    <p class="rank-sub">เรียงจากมาก → น้อยนะ<br>กดค้างที่ ☰ แล้วลากจัดอันดับได้เลย 💗</p>
 
     <ul class="rank-list" id="rankList">
-      <li class="rank-item"><span class="rank-num">1</span><span class="rank-label">ให้อิสระ ไม่จู้จี้จุกจิก</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">1</span><span class="rank-label">ให้อิสระ ไม่จู้จี้</span><span class="drag-handle">☰</span></li>
       <li class="rank-item"><span class="rank-num">2</span><span class="rank-label">กอด หอม อ้อน ให้กำลังใจเทอ</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">3</span><span class="rank-label">เลี้ยงขนม/ของกินอร่อย ๆ บ่อย ๆ</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">4</span><span class="rank-label">พูดจาดี ๆ สุภาพกับเทอเสมอ</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">5</span><span class="rank-label">ทำอาหารหรือขนมให้กินเอง</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">6</span><span class="rank-label">ตั้งใจฟังตอนเทอบ่น แล้วปลอบใจ</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">7</span><span class="rank-label">จำวันสำคัญ คอยเซอร์ไพรส์เล็ก ๆ</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">8</span><span class="rank-label">นวดให้เวลาเมื่อยหรือเหนื่อย</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">9</span><span class="rank-label">เป็นห่วง ถามไถ่เรื่องสุขภาพ</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">10</span><span class="rank-label">อยู่เป็นเพื่อน เวลาเหงาหรือไม่สบายใจ</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">3</span><span class="rank-label">เลี้ยงขนมบ่อย ๆ</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">4</span><span class="rank-label">พูดจาดี ๆ สุภาพกับเทอ</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">5</span><span class="rank-label">ตอบเทอเร็ว ๆ</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">6</span><span class="rank-label">บอกฝันดีเทอก่อนนอน</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">7</span><span class="rank-label">รายงานเทอทุกเรื่อง</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">8</span><span class="rank-label">พาเทอเที่ยวกลางคืนบ่อย ๆ</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">9</span><span class="rank-label">ขับรถให้เทอนั่ง</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">10</span><span class="rank-label">พาเทอไปเปิดประสบการณ์ที่ใหม่ ๆ</span><span class="drag-handle">☰</span></li>
     </ul>
 
     <p class="rank-footer">Happy 25th, Swiss 🎂💗</p>
