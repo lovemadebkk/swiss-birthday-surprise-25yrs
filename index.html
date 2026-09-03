@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Happy Birthday Swiss 🎂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --soft-blue: #cfe7f5;
+    --soft-blue-2: #eaf5fb;
+    --cream: #fbf3e6;
+    --white: #ffffff;
+    --dark-blue: #33526b;
+    --warm-brown: #9c7b5c;
+    --shadow: rgba(51, 82, 107, 0.18);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    background: linear-gradient(180deg, var(--soft-blue-2) 0%, var(--cream) 65%, var(--cream) 100%);
+    font-family: 'Quicksand', sans-serif;
+    color: var(--dark-blue);
+  }
+
+  #page1, #page2 {
+    min-height: 100svh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px 48px;
+    overflow: hidden;
+  }
+
+  #page2 {
+    display: none;
+    text-align: center;
+  }
+
+  /* ---------- soft ambient decoration ---------- */
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .glow-1 { width: 220px; height: 220px; background: var(--soft-blue); top: -60px; left: -60px; }
+  .glow-2 { width: 260px; height: 260px; background: #ffe9c9; bottom: -80px; right: -70px; opacity: 0.4; }
+
+  .sparkle {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: var(--white);
+    border-radius: 50%;
+    box-shadow: 0 0 6px 2px rgba(255,255,255,0.9);
+    opacity: 0;
+  }
+
+  /* ---------- character stage ---------- */
+  .character-stage {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    height: 150px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 6px;
+  }
+
+  .penguin {
+    width: 190px;
+    height: auto;
+    transform: translateY(40px) scale(0.7);
+    opacity: 0;
+  }
+  .penguin.show {
+    animation: penguinPop 900ms cubic-bezier(.25,1.5,.5,1) forwards;
+    opacity: 1; /* locked in permanently — stays even after the idle animation takes over */
+  }
+  @keyframes penguinPop {
+    0%   { transform: translateY(40px) scale(0.6); opacity: 0; }
+    55%  { transform: translateY(-10px) scale(1.06); opacity: 1; }
+    75%  { transform: translateY(4px) scale(0.98) rotate(-2deg); }
+    100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+  }
+  .penguin.settled { animation: penguinIdle 3.2s ease-in-out infinite; }
+  @keyframes penguinIdle {
+    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+    50% { transform: translateY(-4px) rotate(1.5deg); }
+  }
+
+  /* ---------- polaroids ---------- */
+  .polaroid-row {
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+    height: 178px;
+    margin: 4px 0 10px;
+  }
+
+  .polaroid {
+    position: absolute;
+    width: 132px;
+    background: var(--white);
+    padding: 10px 10px 26px;
+    border-radius: 4px;
+    box-shadow: 0 10px 24px var(--shadow);
+    opacity: 0;
+  }
+
+  .polaroid .frame {
+    width: 100%;
+    height: 132px;
+    border-radius: 2px;
+    background: linear-gradient(135deg, var(--soft-blue), #f3e3cf);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .polaroid .frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .polaroid .frame .placeholder-text {
+    font-size: 11px;
+    color: var(--dark-blue);
+    opacity: 0.55;
+    padding: 8px;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .polaroid.swiss {
+    left: 8px;
+    top: 6px;
+    transform: rotate(-7deg) translateY(24px);
+    z-index: 2;
+  }
+  .polaroid.couple {
+    right: 8px;
+    top: 30px;
+    transform: rotate(6deg) translateY(24px);
+    z-index: 1;
+  }
+
+  .polaroid.show.swiss {
+    animation: polaroidIn 700ms cubic-bezier(.2,.8,.3,1) forwards;
+  }
+  .polaroid.show.couple {
+    animation: polaroidIn2 700ms cubic-bezier(.2,.8,.3,1) 140ms forwards;
+  }
+  @keyframes polaroidIn {
+    0%   { opacity: 0; transform: rotate(-7deg) translateY(24px) scale(0.92); }
+    100% { opacity: 1; transform: rotate(-6deg) translateY(0) scale(1); }
+  }
+  @keyframes polaroidIn2 {
+    0%   { opacity: 0; transform: rotate(6deg) translateY(24px) scale(0.92); }
+    100% { opacity: 1; transform: rotate(7deg) translateY(0) scale(1); }
+  }
+
+  /* ---------- text ---------- */
+  .text-block {
+    text-align: center;
+    margin-top: 6px;
+  }
+
+  .heading {
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1.15;
+    color: var(--dark-blue);
+    margin: 0;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  .heading.show {
+    animation: fadeUp 650ms ease forwards;
+  }
+
+  .date {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    color: var(--warm-brown);
+    margin: 8px 0 0;
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  .date.show {
+    animation: fadeUp 550ms ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- CTA ---------- */
+  .cta {
+    margin-top: 26px;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--soft-blue), #dff0f8);
+    color: var(--dark-blue);
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 10px 22px var(--shadow);
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cta.show {
+    animation: ctaIn 600ms ease forwards;
+  }
+  @keyframes ctaIn {
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .cta:active {
+    transform: scale(0.94);
+  }
+
+  /* ---------- page transition ---------- */
+  .fading-out {
+    animation: fadeOutSlide 480ms ease forwards;
+  }
+  @keyframes fadeOutSlide {
+    to { opacity: 0; transform: translateY(-16px); }
+  }
+  .fading-in {
+    animation: fadeInSlide 520ms ease forwards;
+  }
+  @keyframes fadeInSlide {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  #page2 h2 {
+    font-family: 'Caveat', cursive;
+    font-size: 34px;
+    margin: 0 0 8px;
+  }
+  #page2 p {
+    font-size: 14px;
+    color: var(--warm-brown);
+    max-width: 260px;
+  }
+
+  @media (min-width: 640px) {
+    .character-stage { max-width: 420px; height: 190px; }
+    .penguin { width: 230px; }
+    .polaroid-row { max-width: 400px; height: 210px; }
+    .polaroid { width: 156px; }
+    .polaroid .frame { height: 156px; }
+    .heading { font-size: 54px; }
+    .date { font-size: 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="page1">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div id="sparkles"></div>
+
+  <div class="character-stage">
+    <img class="penguin" id="penguin" alt="เพนกวิ้นสองตัวกอดกัน"
+      src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 190'%3E%3Cg transform='translate(88,95) rotate(-8)'%3E%3Cellipse cx='0' cy='40' rx='38' ry='34' fill='%23cfe7f5'/%3E%3Cellipse cx='-30' cy='30' rx='11' ry='22' fill='%23cfe7f5' transform='rotate(24 -30 30)'/%3E%3Cellipse cx='0' cy='46' rx='23' ry='24' fill='%23ffffff'/%3E%3Ccircle cx='-4' cy='-14' r='30' fill='%23cfe7f5'/%3E%3Cellipse cx='-4' cy='-7' rx='19' ry='17' fill='%23ffffff'/%3E%3Cpath d='M20 18 Q56 26 62 62 Q52 74 36 60 Q27 40 20 18 Z' fill='%23b9dcef'/%3E%3Cpath d='M-14 -12 Q-10 -8 -6 -12' stroke='%2333526b' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M4 -12 Q8 -8 12 -12' stroke='%2333526b' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cellipse cx='-16' cy='-1' rx='6' ry='4' fill='%23f2c7c2' opacity='0.75'/%3E%3Cellipse cx='12' cy='-1' rx='6' ry='4' fill='%23f2c7c2' opacity='0.75'/%3E%3Cpath d='M-8 -3 L-4 3 L0 -3 Z' fill='%23e3a04f'/%3E%3Cellipse cx='-12' cy='75' rx='10' ry='5' fill='%23e3a04f'/%3E%3Cellipse cx='14' cy='75' rx='10' ry='5' fill='%23e3a04f'/%3E%3C/g%3E%3Cg transform='translate(132,95) rotate(8) scale(-1,1)'%3E%3Cellipse cx='0' cy='40' rx='38' ry='34' fill='%23e8f3fa'/%3E%3Cellipse cx='-30' cy='30' rx='11' ry='22' fill='%23e8f3fa' transform='rotate(24 -30 30)'/%3E%3Cellipse cx='0' cy='46' rx='23' ry='24' fill='%23ffffff'/%3E%3Ccircle cx='-4' cy='-14' r='30' fill='%23e8f3fa'/%3E%3Cellipse cx='-4' cy='-7' rx='19' ry='17' fill='%23ffffff'/%3E%3Cpath d='M20 18 Q56 26 62 62 Q52 74 36 60 Q27 40 20 18 Z' fill='%23d3e9f4'/%3E%3Cpath d='M-14 -12 Q-10 -8 -6 -12' stroke='%2333526b' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cpath d='M4 -12 Q8 -8 12 -12' stroke='%2333526b' stroke-width='2.6' fill='none' stroke-linecap='round'/%3E%3Cellipse cx='-16' cy='-1' rx='6' ry='4' fill='%23f2c7c2' opacity='0.75'/%3E%3Cellipse cx='12' cy='-1' rx='6' ry='4' fill='%23f2c7c2' opacity='0.75'/%3E%3Cpath d='M-8 -3 L-4 3 L0 -3 Z' fill='%23e3a04f'/%3E%3Cellipse cx='-12' cy='75' rx='10' ry='5' fill='%23e3a04f'/%3E%3Cellipse cx='14' cy='75' rx='10' ry='5' fill='%23e3a04f'/%3E%3C/g%3E%3C/svg%3E">
+  </div>
+
+  <div class="polaroid-row">
+    <div class="polaroid swiss" id="polaroid-swiss">
+      <div class="frame">
+        <img src="swiss.jpg" alt="Swiss"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="placeholder-text" style="display:flex; align-items:center; justify-content:center;">
+          ใส่รูป Swiss<br>ที่นี่ (swiss.jpg)
+        </div>
+      </div>
+    </div>
+    <div class="polaroid couple" id="polaroid-couple">
+      <div class="frame">
+        <img src="couple.jpg" alt="เรา"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="placeholder-text" style="display:flex; align-items:center; justify-content:center;">
+          ใส่รูปคู่<br>ที่นี่ (couple.jpg)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-block">
+    <h1 class="heading" id="heading">Happy birthday na Swiss 🎂</h1>
+    <p class="date" id="date">13 March 2027</p>
+  </div>
+
+  <button class="cta" id="cta">Cheers to 25! Let's Gooo 🥂</button>
+</div>
+
+<div id="page2">
+  <h2>ไปกันต่อ 🎉</h2>
+  <p>หน้าคำอวยพรกำลังจะมาต่อจากตรงนี้</p>
+</div>
+
+<script>
+  function makeSparkles() {
+    const container = document.getElementById('sparkles');
+    const positions = [
+      {x: '18%', y: '22%'}, {x: '80%', y: '18%'}, {x: '72%', y: '38%'},
+      {x: '26%', y: '40%'}, {x: '50%', y: '14%'}
+    ];
+    positions.forEach((p, i) => {
+      const s = document.createElement('div');
+      s.className = 'sparkle';
+      s.style.left = p.x;
+      s.style.top = p.y;
+      s.style.animation = `sparkleTwinkle 1400ms ease ${600 + i * 140}ms forwards`;
+      container.appendChild(s);
+    });
+    const style = document.createElement('style');
+    style.textContent = `@keyframes sparkleTwinkle {
+      0% { opacity: 0; transform: scale(0.4); }
+      40% { opacity: 1; transform: scale(1.1); }
+      100% { opacity: 0; transform: scale(0.6); }
+    }`;
+    document.head.appendChild(style);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const penguin = document.getElementById('penguin');
+    const pSwiss = document.getElementById('polaroid-swiss');
+    const pCouple = document.getElementById('polaroid-couple');
+    const heading = document.getElementById('heading');
+    const date = document.getElementById('date');
+    const cta = document.getElementById('cta');
+
+    setTimeout(() => { penguin.classList.add('show'); makeSparkles(); }, 300);
+    setTimeout(() => { penguin.classList.add('settled'); }, 1200);
+
+    setTimeout(() => { pSwiss.classList.add('show'); }, 1000);
+    setTimeout(() => { pCouple.classList.add('show'); }, 1140);
+
+    setTimeout(() => { heading.classList.add('show'); }, 1750);
+    setTimeout(() => { date.classList.add('show'); }, 2150);
+    setTimeout(() => { cta.classList.add('show'); }, 2600);
+
+    cta.addEventListener('click', () => {
+      const page1 = document.getElementById('page1');
+      const page2 = document.getElementById('page2');
+      page1.classList.add('fading-out');
+      setTimeout(() => {
+        page1.style.display = 'none';
+        page2.style.display = 'flex';
+        page2.classList.add('fading-in');
+      }, 460);
+    });
+  });
+</script>
+
+</body>
+</html>
