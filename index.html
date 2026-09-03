@@ -42,10 +42,7 @@
     overflow: hidden;
   }
 
-  #page2 {
-    display: none;
-    text-align: center;
-  }
+  #page2 { display: none; text-align: center; }
 
   /* ---------- soft ambient decoration ---------- */
   .glow {
@@ -67,7 +64,7 @@
     opacity: 0;
   }
 
-  /* ---------- character stage ---------- */
+  /* ---------- character stage (page 1) ---------- */
   .character-stage {
     position: relative;
     width: 100%;
@@ -87,7 +84,7 @@
   }
   .penguin.show {
     animation: penguinPop 900ms cubic-bezier(.25,1.5,.5,1) forwards;
-    opacity: 1; /* locked in permanently — stays even after the idle animation takes over */
+    opacity: 1;
   }
   @keyframes penguinPop {
     0%   { transform: translateY(40px) scale(0.6); opacity: 0; }
@@ -101,7 +98,20 @@
     50% { transform: translateY(-4px) rotate(1.5deg); }
   }
 
-  /* ---------- polaroids ---------- */
+  /* ---------- mascot penguin (page 2 & 3 host character) ---------- */
+  .mascot {
+    display: block;
+    width: 72px;
+    height: auto;
+    margin: 0 auto 8px;
+    animation: mascotBob 3.2s ease-in-out infinite;
+  }
+  @keyframes mascotBob {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50%      { transform: translateY(-6px) rotate(3deg); }
+  }
+
+  /* ---------- polaroids (page 1) ---------- */
   .polaroid-row {
     position: relative;
     width: 100%;
@@ -147,25 +157,11 @@
     line-height: 1.4;
   }
 
-  .polaroid.swiss {
-    left: 8px;
-    top: 6px;
-    transform: rotate(-7deg) translateY(24px);
-    z-index: 2;
-  }
-  .polaroid.couple {
-    right: 8px;
-    top: 30px;
-    transform: rotate(6deg) translateY(24px);
-    z-index: 1;
-  }
+  .polaroid.swiss { left: 8px; top: 6px; transform: rotate(-7deg) translateY(24px); z-index: 2; }
+  .polaroid.couple { right: 8px; top: 30px; transform: rotate(6deg) translateY(24px); z-index: 1; }
 
-  .polaroid.show.swiss {
-    animation: polaroidIn 700ms cubic-bezier(.2,.8,.3,1) forwards;
-  }
-  .polaroid.show.couple {
-    animation: polaroidIn2 700ms cubic-bezier(.2,.8,.3,1) 140ms forwards;
-  }
+  .polaroid.show.swiss { animation: polaroidIn 700ms cubic-bezier(.2,.8,.3,1) forwards; }
+  .polaroid.show.couple { animation: polaroidIn2 700ms cubic-bezier(.2,.8,.3,1) 140ms forwards; }
   @keyframes polaroidIn {
     0%   { opacity: 0; transform: rotate(-7deg) translateY(24px) scale(0.92); }
     100% { opacity: 1; transform: rotate(-6deg) translateY(0) scale(1); }
@@ -175,11 +171,8 @@
     100% { opacity: 1; transform: rotate(7deg) translateY(0) scale(1); }
   }
 
-  /* ---------- text ---------- */
-  .text-block {
-    text-align: center;
-    margin-top: 6px;
-  }
+  /* ---------- text (page 1) ---------- */
+  .text-block { text-align: center; margin-top: 6px; }
 
   .heading {
     font-family: 'Caveat', cursive;
@@ -191,9 +184,7 @@
     opacity: 0;
     transform: translateY(14px);
   }
-  .heading.show {
-    animation: fadeUp 650ms ease forwards;
-  }
+  .heading.show { animation: fadeUp 650ms ease forwards; }
 
   .date {
     font-family: 'Quicksand', sans-serif;
@@ -205,15 +196,11 @@
     opacity: 0;
     transform: translateY(10px);
   }
-  .date.show {
-    animation: fadeUp 550ms ease forwards;
-  }
+  .date.show { animation: fadeUp 550ms ease forwards; }
 
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-  /* ---------- CTA ---------- */
+  /* ---------- CTA (page 1) ---------- */
   .cta {
     margin-top: 26px;
     padding: 15px 30px;
@@ -230,227 +217,234 @@
     transform: translateY(12px) scale(0.96);
     -webkit-tap-highlight-color: transparent;
   }
-  .cta.show {
-    animation: ctaIn 600ms ease forwards;
+  .cta.show { animation: ctaIn 600ms ease forwards; }
+  @keyframes ctaIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+  .cta:active { transform: scale(0.94); }
+
+  /* small continue button used inside book card 6 */
+  .btn-continue {
+    margin-top: 20px;
+    padding: 13px 26px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--soft-blue), #dff0f8);
+    color: var(--dark-blue);
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 10px 22px var(--shadow);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
-  @keyframes ctaIn {
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  .cta:active {
-    transform: scale(0.94);
-  }
+  .btn-continue:active { transform: scale(0.94); }
 
   /* ---------- page transition ---------- */
-  .fading-out {
-    animation: fadeOutSlide 480ms ease forwards;
+  .fading-out { animation: fadeOutSlide 480ms ease forwards; }
+  @keyframes fadeOutSlide { to { opacity: 0; transform: translateY(-16px); } }
+  .fading-in { animation: fadeInSlide 520ms ease forwards; }
+  @keyframes fadeInSlide { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ================= PAGE 2 — WISH BOOK ================= */
+  #page2 {
+    display: none;
+    min-height: 100svh;
+    padding: 28px 18px 30px;
+    justify-content: center;
+    align-items: center;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(255,255,255,0.8), transparent 28%),
+      linear-gradient(180deg, #eaf5fb 0%, #fbf3e6 100%);
   }
-  @keyframes fadeOutSlide {
-    to { opacity: 0; transform: translateY(-16px); }
-  }
-  .fading-in {
-    animation: fadeInSlide 520ms ease forwards;
-  }
-  @keyframes fadeInSlide {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
 
-#page2 {
-  display: none;
-  min-height: 100svh;
-  padding: 28px 18px 30px;
-  justify-content: center;
-  align-items: center;
-  background:
-    radial-gradient(circle at 15% 15%, rgba(255,255,255,0.8), transparent 28%),
-    linear-gradient(180deg, #eaf5fb 0%, #fbf3e6 100%);
-}
+  .book { width: 100%; max-width: 390px; position: relative; }
 
-.book {
-  width: 100%;
-  max-width: 390px;
-  position: relative;
-}
-
-.book-card {
-  display: none;
-  width: 100%;
-  min-height: 560px;
-  padding: 34px 26px 30px;
-  background: rgba(255,255,255,0.94);
-  border-radius: 22px;
-  box-shadow:
-    0 18px 45px rgba(51,82,107,0.16),
-    0 3px 8px rgba(51,82,107,0.08);
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.book-card.active {
-  display: flex;
-  animation: cardIn 420ms ease forwards;
-}
-
-@keyframes cardIn {
-  from {
-    opacity: 0;
-    transform: translateX(25px) rotate(1deg);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) rotate(0);
-  }
-}
-
-.book-number {
-  position: absolute;
-  top: 18px;
-  right: 22px;
-  font-size: 12px;
-  color: var(--warm-brown);
-  opacity: 0.65;
-}
-
-.book-card .mini-heart {
-  font-size: 28px;
-  margin-bottom: 12px;
-}
-
-.book-card h3 {
-  font-family: 'Mali', cursive;
-  font-size: 30;
-  line-height: 1.15;
-  margin: 0 0 18px;
-  color: var(--dark-blue);
-}
-
-.book-card p {
-  font-family: 'Quicksand', sans-serif;
-  font-size: 16px;
-  line-height: 1.9;
-  color: #5f7180;
-  margin: 0;
-  max-width: 310px;
-}
-
-.book-photo {
-  width: 100%;
-  max-width: 285px;
-  height: 260px;
-  margin: 8px 0 22px;
-  padding: 9px 9px 25px;
-  background: white;
-  box-shadow: 0 10px 25px rgba(51,82,107,0.16);
-  transform: rotate(-2deg);
-}
-
-.book-photo:nth-of-type(2) {
-  transform: rotate(2deg);
-}
-
-.book-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.book-photo.no-margin {
-  margin-top: 0;
-}
-
-.book-decor {
-  margin-top: 22px;
-  font-size: 23px;
-  letter-spacing: 5px;
-}
-
-.book-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 18px;
-  margin-top: 20px;
-}
-
-.book-btn {
-  border: none;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.9);
-  color: var(--dark-blue);
-  font-size: 20px;
-  box-shadow: 0 7px 18px rgba(51,82,107,0.14);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.book-btn:active {
-  transform: scale(0.9);
-}
-
-.book-dots {
-  display: flex;
-  gap: 7px;
-  align-items: center;
-}
-
-.book-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #c4d7e3;
-  transition: all 0.25s ease;
-}
-
-.book-dot.active {
-  width: 20px;
-  border-radius: 10px;
-  background: var(--dark-blue);
-}
-
-.book-hint {
-  text-align: center;
-  margin-top: 12px;
-  font-size: 11px;
-  color: var(--warm-brown);
-  opacity: 0.65;
-}
-
-@media (max-width: 390px) {
   .book-card {
-    min-height: 530px;
-    padding: 30px 21px;
+    display: none;
+    width: 100%;
+    min-height: 540px;
+    padding: 30px 26px 28px;
+    background: rgba(255,255,255,0.94);
+    border-radius: 22px;
+    box-shadow: 0 18px 45px rgba(51,82,107,0.16), 0 3px 8px rgba(51,82,107,0.08);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
   }
 
-  .book-card h3 {
-    font-size: 34px;
+  .book-card.active { display: flex; animation: cardIn 420ms ease forwards; }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateX(25px) rotate(1deg); }
+    to   { opacity: 1; transform: translateX(0) rotate(0); }
   }
 
-  .book-card p {
-    font-size: 14px;
+  .book-number {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    font-size: 12px;
+    color: var(--warm-brown);
+    opacity: 0.65;
+  }
+
+  .book-card .mini-heart { font-size: 26px; margin-bottom: 10px; }
+
+  /* every wish is now a single <p>, cute rounded Thai font */
+  .wish-text {
+    font-family: 'Mali', cursive;
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 1.55;
+    color: var(--dark-blue);
+    margin: 4px 0 0;
+    max-width: 300px;
   }
 
   .book-photo {
+    width: 100%;
+    max-width: 250px;
     height: 230px;
+    margin: 4px 0 18px;
+    padding: 9px 9px 24px;
+    background: white;
+    box-shadow: 0 10px 25px rgba(51,82,107,0.16);
+    transform: rotate(-2deg);
   }
-}
+  .book-photo.tilt-right { transform: rotate(2deg); }
 
+  .book-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .book-decor { margin-top: 18px; font-size: 22px; letter-spacing: 5px; }
+
+  .book-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin-top: 20px;
+  }
+
+  .book-btn {
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    color: var(--dark-blue);
+    font-size: 20px;
+    box-shadow: 0 7px 18px rgba(51,82,107,0.14);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .book-btn:active { transform: scale(0.9); }
+
+  .book-dots { display: flex; gap: 7px; align-items: center; }
+  .book-dot { width: 7px; height: 7px; border-radius: 50%; background: #c4d7e3; transition: all 0.25s ease; }
+  .book-dot.active { width: 20px; border-radius: 10px; background: var(--dark-blue); }
+
+  .book-hint { text-align: center; margin-top: 12px; font-size: 11px; color: var(--warm-brown); opacity: 0.65; }
+
+  @media (max-width: 390px) {
+    .book-card { min-height: 520px; padding: 28px 21px; }
+    .wish-text { font-size: 23px; }
+    .book-photo { height: 210px; }
+  }
+
+  /* ================= PAGE 3 — RANK THE LOVE ================= */
   #page3 {
-  display: none;
-  min-height: 100svh;
-  width: 100%;
-  padding: 30px 20px;
-  background: linear-gradient(180deg, #eaf5fb, #fbf3e6);
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
+    display: none;
+    min-height: 100svh;
+    width: 100%;
+    padding: 34px 20px 44px;
+    background: linear-gradient(180deg, #eaf5fb, #fbf3e6);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .rank-wrap { width: 100%; max-width: 390px; display: flex; flex-direction: column; align-items: center; }
+
+  .rank-title {
+    font-family: 'Mali', cursive;
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 1.45;
+    color: var(--dark-blue);
+    margin: 2px 0 6px;
+  }
+
+  .rank-sub {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 13px;
+    color: var(--warm-brown);
+    margin: 0 0 18px;
+  }
+
+  .rank-list {
+    list-style: none;
+    margin: 0 0 8px;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .rank-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.94);
+    border-radius: 14px;
+    padding: 11px 12px;
+    box-shadow: 0 6px 16px rgba(51,82,107,0.10);
+    user-select: none;
+    transition: box-shadow 150ms ease;
+  }
+  .rank-item.dragging { box-shadow: 0 14px 30px rgba(51,82,107,0.22); opacity: 0.92; z-index: 5; }
+
+  .rank-num {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--soft-blue);
+    color: var(--dark-blue);
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .rank-label {
+    flex: 1 1 auto;
+    text-align: left;
+    font-family: 'Mali', cursive;
+    font-size: 14.5px;
+    color: var(--dark-blue);
+    line-height: 1.3;
+  }
+
+  .drag-handle {
+    flex: 0 0 auto;
+    font-size: 18px;
+    color: var(--warm-brown);
+    padding: 6px 6px;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .rank-footer {
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    color: var(--dark-blue);
+    margin-top: 22px;
+  }
 
   @media (min-width: 640px) {
     .character-stage { max-width: 420px; height: 190px; }
@@ -509,166 +503,108 @@
 </div>
 
 <div id="page2">
-
   <div class="book">
+
+    <img class="mascot" alt="เพนกวิ้นเพื่อนซี้"
+      src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 170'%3E%3Cellipse cx='80' cy='120' rx='58' ry='44' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='128' rx='38' ry='30' fill='%23ffffff'/%3E%3Ccircle cx='80' cy='58' r='46' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='66' rx='30' ry='26' fill='%23ffffff'/%3E%3Cpath d='M58,54 Q66,47 74,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M86,54 Q94,47 102,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M72 66 L80 74 L88 66 Z' fill='%23e3a04f'/%3E%3Cellipse cx='55' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='105' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='34' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(18 34 118)'/%3E%3Cellipse cx='126' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(-18 126 118)'/%3E%3Cellipse cx='60' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3Cellipse cx='100' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3C/svg%3E">
 
     <!-- CARD 1 -->
     <div class="book-card active">
       <div class="book-number">01 / 06</div>
-
       <div class="mini-heart">🎂</div>
-
-      <h3>อายุ 25 แล้วนะ</h3>
-
-      <p>
-        ในที่สุดเค้าจะได้นั่งรถ<br>
-        ที่เบบี๋ขับแล้ววว 🚗💨
-      </p>
-
-      <div class="book-decor">
-        🥂 ✨ 🎈
-      </div>
+      <p class="wish-text">อายุ 25 แล้วนะ 🎂<br>ในที่สุดเค้าจะได้นั่งรถ<br>ที่เบบี๋ขับแล้ววว 🚗💨</p>
+      <div class="book-decor">🥂 ✨ 🎈</div>
     </div>
-
 
     <!-- CARD 2 -->
     <div class="book-card">
       <div class="book-number">02 / 06</div>
-
       <div class="mini-heart">💗</div>
-
       <div class="book-photo">
         <img src="wish1.jpg" alt="รูปสำหรับคำอวยพรหน้า 2">
       </div>
-
-      <h3>ขอให้เทอมีแต่ความสุขมากกกๆๆ</h3>
-
-  
+      <p class="wish-text">ขอให้เทอมีแต่ความสุขมากกกๆๆ 💛</p>
     </div>
-
 
     <!-- CARD 3 -->
     <div class="book-card">
       <div class="book-number">03 / 06</div>
-
       <div class="mini-heart">🫶</div>
-
-      <div class="book-photo">
+      <div class="book-photo tilt-right">
         <img src="wish2.jpg" alt="รูปสำหรับคำอวยพรหน้า 3">
       </div>
-
-  
-
-      <p>
-        อยากให้เทอดูแลตัวเองให้ดี<br>
-        จะได้แข็งแรง อยู่กับเค้านาน ๆ<br>
-
-      </p>
+      <p class="wish-text">อยากให้เทอดูแลตัวเองให้ดี<br>จะได้แข็งแรง อยู่กับเค้านาน ๆ</p>
     </div>
-
 
     <!-- CARD 4 -->
     <div class="book-card">
       <div class="book-number">04 / 06</div>
-
       <div class="mini-heart">✨</div>
-
-      <h3>คิดสิ่งใด<br>ก็ขอให้สมปรารถนา</h3>l
-
-      <div class="book-decor">
-        🌟 ✨ 🌟
-      </div>
+      <p class="wish-text">คิดสิ่งใด<br>ก็ขอให้สมปรารถนา<br>(สิ่งดีดีน้า)</p>
+      <div class="book-decor">🌟 ✨ 🌟</div>
     </div>
-
 
     <!-- CARD 5 -->
     <div class="book-card">
       <div class="book-number">05 / 06</div>
-
       <div class="mini-heart">💼✨</div>
-
       <div class="book-photo">
         <img src="wish3.jpg" alt="รูปสำหรับคำอวยพรหน้า 5">
       </div>
-
-  
-
-      <p>
-        ขอให้ประสบความสำเร็จในหน้าที่การงาน<br>
-        รวย ๆ ปัง ๆ เลยนะ 💰✨<br>
-        แล้วก็อย่าลืมพาเค้าไปเที่ยวด้วยยย 😂
-      </p>
+      <p class="wish-text">ขอให้ประสบความสำเร็จในหน้าที่การงาน<br>รวย ๆ ปัง ๆ เลยนะ 💰✨<br>แล้วก็อย่าลืมพาเค้าไปเที่ยวด้วยยย 😂</p>
     </div>
-
 
     <!-- CARD 6 -->
     <div class="book-card">
       <div class="book-number">06 / 06</div>
-
       <div class="mini-heart">💗</div>
-
-      <h3>ไม่ว่าจะเจอเรื่องอะไร</h3>
-
-      <p>
-        เค้าก็จะอยู่ข้างเทอนะ<br><br>
-
-        <strong>fr 💗</strong
-      </p>
-
-      <div class="book-decor">
-        🫶🏻 💗 ✨
-      </div>
+      <p class="wish-text">ไม่ว่าจะเจอเรื่องอะไร<br>เค้าก็จะอยู่ข้างเทอนะ<br><strong>fr 💗</strong></p>
+      <div class="book-decor">🫶🏻 💗 ✨</div>
+      <button class="btn-continue" id="toPage3">ไปต่ออีกนิด → 💌</button>
     </div>
-
 
     <!-- ปุ่มควบคุม -->
     <div class="book-controls">
-
-      <button class="book-btn" id="prevCard" aria-label="ย้อนกลับ">
-        ←
-      </button>
-
+      <button class="book-btn" id="prevCard" aria-label="ย้อนกลับ">←</button>
       <div class="book-dots">
-
         <span class="book-dot active"></span>
         <span class="book-dot"></span>
         <span class="book-dot"></span>
         <span class="book-dot"></span>
         <span class="book-dot"></span>
         <span class="book-dot"></span>
-
       </div>
-
-      <button class="book-btn" id="nextCard" aria-label="หน้าถัดไป">
-        →
-      </button>
-
+      <button class="book-btn" id="nextCard" aria-label="หน้าถัดไป">→</button>
     </div>
 
-    <div class="book-hint">
-      ปัดซ้ายขวาเพื่อเปิดหน้าต่อ 💌
-    </div>
-
+    <div class="book-hint">ปัดซ้ายขวาเพื่อเปิดหน้าต่อ 💌</div>
   </div>
-
 </div>
 
-
-<!-- PAGE 3 เตรียมไว้สำหรับทำต่อ -->
+<!-- PAGE 3 — จัดอันดับความรัก -->
 <div id="page3">
+  <div class="rank-wrap">
+    <img class="mascot" alt="เพนกวิ้นเพื่อนซี้"
+      src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 170'%3E%3Cellipse cx='80' cy='120' rx='58' ry='44' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='128' rx='38' ry='30' fill='%23ffffff'/%3E%3Ccircle cx='80' cy='58' r='46' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='66' rx='30' ry='26' fill='%23ffffff'/%3E%3Cpath d='M58,54 Q66,47 74,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M86,54 Q94,47 102,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M72 66 L80 74 L88 66 Z' fill='%23e3a04f'/%3E%3Cellipse cx='55' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='105' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='34' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(18 34 118)'/%3E%3Cellipse cx='126' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(-18 126 118)'/%3E%3Cellipse cx='60' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3Cellipse cx='100' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3C/svg%3E">
 
-  <div>
-    <div style="font-size:42px;">✨</div>
+    <p class="rank-title">ถ้าเลือกได้<br>อยากให้เค้าทำอะไรให้เทอมากที่สุด?</p>
+    <p class="rank-sub">กดค้างที่ ☰ แล้วลาก เพื่อจัดอันดับ (มาก → น้อย) 💗</p>
 
-    <h2 style="font-family:'Caveat',cursive;font-size:42px;">
-      To be continued...
-    </h2>
+    <ul class="rank-list" id="rankList">
+      <li class="rank-item"><span class="rank-num">1</span><span class="rank-label">ให้อิสระ ไม่จู้จี้จุกจิก</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">2</span><span class="rank-label">กอด หอม อ้อน ให้กำลังใจเทอ</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">3</span><span class="rank-label">เลี้ยงขนม/ของกินอร่อย ๆ บ่อย ๆ</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">4</span><span class="rank-label">พูดจาดี ๆ สุภาพกับเทอเสมอ</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">5</span><span class="rank-label">ทำอาหารหรือขนมให้กินเอง</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">6</span><span class="rank-label">ตั้งใจฟังตอนเทอบ่น แล้วปลอบใจ</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">7</span><span class="rank-label">จำวันสำคัญ คอยเซอร์ไพรส์เล็ก ๆ</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">8</span><span class="rank-label">นวดให้เวลาเมื่อยหรือเหนื่อย</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">9</span><span class="rank-label">เป็นห่วง ถามไถ่เรื่องสุขภาพ</span><span class="drag-handle">☰</span></li>
+      <li class="rank-item"><span class="rank-num">10</span><span class="rank-label">อยู่เป็นเพื่อน เวลาเหงาหรือไม่สบายใจ</span><span class="drag-handle">☰</span></li>
+    </ul>
 
-    <p>
-      หน้าที่ 3 กำลังจะมา 💗
-    </p>
+    <p class="rank-footer">Happy 25th, Swiss 🎂💗</p>
   </div>
-
 </div>
 
 <script>
@@ -695,6 +631,15 @@
     document.head.appendChild(style);
   }
 
+  function goToPage(fromEl, toEl) {
+    fromEl.classList.add('fading-out');
+    setTimeout(() => {
+      fromEl.style.display = 'none';
+      toEl.style.display = 'flex';
+      toEl.classList.add('fading-in');
+    }, 460);
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
     const penguin = document.getElementById('penguin');
     const pSwiss = document.getElementById('polaroid-swiss');
@@ -705,97 +650,105 @@
 
     setTimeout(() => { penguin.classList.add('show'); makeSparkles(); }, 300);
     setTimeout(() => { penguin.classList.add('settled'); }, 1200);
-
     setTimeout(() => { pSwiss.classList.add('show'); }, 1000);
     setTimeout(() => { pCouple.classList.add('show'); }, 1140);
-
     setTimeout(() => { heading.classList.add('show'); }, 1750);
     setTimeout(() => { date.classList.add('show'); }, 2150);
     setTimeout(() => { cta.classList.add('show'); }, 2600);
 
-cta.addEventListener('click', () => {
-  const page1 = document.getElementById('page1');
-  const page2 = document.getElementById('page2');
+    cta.addEventListener('click', () => {
+      goToPage(document.getElementById('page1'), document.getElementById('page2'));
+    });
 
-  page1.classList.add('fading-out');
+    const toPage3Btn = document.getElementById('toPage3');
+    if (toPage3Btn) {
+      toPage3Btn.addEventListener('click', () => {
+        goToPage(document.getElementById('page2'), document.getElementById('page3'));
+      });
+    }
 
-  setTimeout(() => {
-    page1.style.display = 'none';
-    page2.style.display = 'flex';
-    page2.classList.add('fading-in');
-  }, 460);
-});
+    /* ========= BIRTHDAY BOOK (page 2) ========= */
+    const cards = document.querySelectorAll('.book-card');
+    const dots = document.querySelectorAll('.book-dot');
+    const prevCard = document.getElementById('prevCard');
+    const nextCard = document.getElementById('nextCard');
+    let currentCard = 0;
 
+    function showCard(index) {
+      if (index < 0) index = cards.length - 1;
+      if (index >= cards.length) index = 0;
+      cards.forEach((card, i) => card.classList.toggle('active', i === index));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+      currentCard = index;
+    }
 
-/* =========================
-   BIRTHDAY BOOK
-   ========================= */
+    nextCard.addEventListener('click', () => showCard(currentCard + 1));
+    prevCard.addEventListener('click', () => showCard(currentCard - 1));
 
-const cards = document.querySelectorAll('.book-card');
-const dots = document.querySelectorAll('.book-dot');
-const prevCard = document.getElementById('prevCard');
-const nextCard = document.getElementById('nextCard');
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const book = document.querySelector('.book');
 
-let currentCard = 0;
+    book.addEventListener('touchstart', (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+    }, { passive: true });
 
-function showCard(index) {
+    book.addEventListener('touchend', (event) => {
+      touchEndX = event.changedTouches[0].screenX;
+      const distance = touchStartX - touchEndX;
+      if (Math.abs(distance) < 50) return;
+      if (distance > 0) showCard(currentCard + 1);
+      else showCard(currentCard - 1);
+    }, { passive: true });
 
-  if (index < 0) {
-    index = cards.length - 1;
-  }
+    /* ========= RANK THE LOVE (page 3, drag to reorder) ========= */
+    const rankList = document.getElementById('rankList');
+    if (rankList) {
+      let draggingEl = null;
 
-  if (index >= cards.length) {
-    index = 0;
-  }
+      function updateRankNumbers() {
+        rankList.querySelectorAll('.rank-item').forEach((item, i) => {
+          item.querySelector('.rank-num').textContent = i + 1;
+        });
+      }
 
-  cards.forEach((card, i) => {
-    card.classList.toggle('active', i === index);
-  });
+      function getDragAfterElement(container, y) {
+        const items = [...container.querySelectorAll('.rank-item:not(.dragging)')];
+        return items.reduce((closest, child) => {
+          const box = child.getBoundingClientRect();
+          const offset = y - box.top - box.height / 2;
+          if (offset < 0 && offset > closest.offset) {
+            return { offset, element: child };
+          }
+          return closest;
+        }, { offset: -Infinity, element: null }).element;
+      }
 
-  dots.forEach((dot, i) => {
-    dot.classList.toggle('active', i === index);
-  });
+      rankList.addEventListener('pointerdown', (e) => {
+        const handle = e.target.closest('.drag-handle');
+        if (!handle) return;
+        draggingEl = handle.closest('.rank-item');
+        draggingEl.setPointerCapture(e.pointerId);
+        draggingEl.classList.add('dragging');
+      });
 
-  currentCard = index;
-}
+      rankList.addEventListener('pointermove', (e) => {
+        if (!draggingEl) return;
+        const afterEl = getDragAfterElement(rankList, e.clientY);
+        if (afterEl == null) rankList.appendChild(draggingEl);
+        else rankList.insertBefore(draggingEl, afterEl);
+      });
 
-nextCard.addEventListener('click', () => {
-  showCard(currentCard + 1);
-});
+      function endDrag() {
+        if (!draggingEl) return;
+        draggingEl.classList.remove('dragging');
+        draggingEl = null;
+        updateRankNumbers();
+      }
 
-prevCard.addEventListener('click', () => {
-  showCard(currentCard - 1);
-});
-
-
-/* =========================
-   SWIPE บนมือถือ
-   ========================= */
-
-let touchStartX = 0;
-let touchEndX = 0;
-
-const book = document.querySelector('.book');
-
-book.addEventListener('touchstart', (event) => {
-  touchStartX = event.changedTouches[0].screenX;
-}, { passive: true });
-
-book.addEventListener('touchend', (event) => {
-  touchEndX = event.changedTouches[0].screenX;
-
-  const distance = touchStartX - touchEndX;
-
-  if (Math.abs(distance) < 50) {
-    return;
-  }
-
-  if (distance > 0) {
-    showCard(currentCard + 1);
-  } else {
-    showCard(currentCard - 1);
-  }
-}, { passive: true });
+      rankList.addEventListener('pointerup', endDrag);
+      rankList.addEventListener('pointercancel', endDrag);
+    }
   });
 </script>
 
