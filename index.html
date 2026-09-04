@@ -43,6 +43,40 @@
   }
 
   #page2 { display: none; text-align: center; }
+  #page3 { display: none; width: 100%; }
+
+  /* full-screen crossfade overlay, used both leaving this file and arriving on index2.html */
+  #pageOverlay{
+    position: fixed; inset: 0;
+    background: linear-gradient(180deg, var(--soft-blue-2), var(--cream));
+    opacity: 0; pointer-events: none;
+    z-index: 9999;
+    transition: opacity 520ms ease;
+  }
+
+  /* one-shot "sign" burst when the prayer button is pressed */
+  .pray-burst{
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 50px; text-align: center;
+    background: rgba(255, 246, 230, 0.94);
+    z-index: 9998;
+    animation: prayBurst 900ms ease forwards;
+  }
+  .pray-burst span{
+    display: block;
+    font-family: 'Mali', cursive;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--dark-blue);
+    margin-top: 10px;
+  }
+  @keyframes prayBurst{
+    0%   { opacity: 0; transform: scale(0.7); }
+    28%  { opacity: 1; transform: scale(1.06); }
+    72%  { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.1); }
+  }
 
   /* ---------- soft ambient decoration ---------- */
   .glow {
@@ -223,7 +257,7 @@
 
   /* small continue button used inside book card 6 */
   .btn-continue {
-    margin-top: 20px;
+    margin-top: 16px;
     padding: 13px 26px;
     border: none;
     border-radius: 999px;
@@ -239,13 +273,22 @@
   .btn-continue:active { transform: scale(0.94); }
   .btn-pray {
     background: linear-gradient(135deg, #ffe9c9, #fff6e6);
-    font-size: 15px;
-    padding: 14px 26px;
-    animation: prayPulse 2.4s ease-in-out infinite;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 15px 30px;
+    box-shadow: 0 12px 28px rgba(230, 180, 90, 0.4);
+    animation: prayPulse 2.2s ease-in-out infinite;
   }
   @keyframes prayPulse {
-    0%, 100% { box-shadow: 0 10px 22px rgba(51,82,107,0.16); }
-    50% { box-shadow: 0 10px 26px rgba(230,180,90,0.35); }
+    0%, 100% { box-shadow: 0 12px 26px rgba(51,82,107,0.16); transform: scale(1); }
+    50% { box-shadow: 0 14px 32px rgba(230,180,90,0.45); transform: scale(1.03); }
+  }
+  .pray-caption {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 10.5px;
+    color: var(--warm-brown);
+    margin: 8px 0 0;
+    opacity: 0.8;
   }
 
   /* ---------- page transition ---------- */
@@ -258,7 +301,7 @@
   #page2 {
     display: none;
     min-height: 100svh;
-    padding: 28px 18px 30px;
+    padding: 16px 16px 14px;
     justify-content: center;
     align-items: center;
     background:
@@ -268,14 +311,17 @@
 
   .book { width: 100%; max-width: 390px; position: relative; }
 
+  .mascot-sm { width: 52px; margin: 0 auto 4px; }
+
   .book-card {
     display: none;
     width: 100%;
-    min-height: 540px;
-    padding: 30px 26px 28px;
+    min-height: unset;
+    max-height: calc(100svh - 84px);
+    padding: 18px 18px 14px;
     background: rgba(255,255,255,0.94);
-    border-radius: 22px;
-    box-shadow: 0 18px 45px rgba(51,82,107,0.16), 0 3px 8px rgba(51,82,107,0.08);
+    border-radius: 20px;
+    box-shadow: 0 14px 34px rgba(51,82,107,0.16), 0 3px 8px rgba(51,82,107,0.08);
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -293,167 +339,240 @@
 
   .book-number {
     position: absolute;
-    top: 18px;
-    right: 22px;
-    font-size: 12px;
+    top: 10px;
+    right: 16px;
+    font-size: 10px;
     color: var(--warm-brown);
     opacity: 0.65;
   }
 
-  .book-card .mini-heart { font-size: 24px; margin-bottom: 10px; }
+  .book-card .mini-heart { font-size: 19px; margin-bottom: 6px; }
 
-  /* every wish is now a single <p>, cute rounded Thai font */
+  /* cute rounded Thai font, keyboard-key sized */
   .wish-text {
     font-family: 'Mali', cursive;
     font-weight: 600;
-    font-size: 24px;
+    font-size: clamp(13.5px, 4vw, 16px);
     line-height: 1.55;
     color: var(--dark-blue);
-    margin: 4px 0 0;
-    max-width: 300px;
+    margin: 2px 0 0;
+    max-width: 290px;
   }
 
   .book-photo {
     width: 100%;
-    max-width: 250px;
-    height: 230px;
-    margin: 4px 0 18px;
-    padding: 9px 9px 24px;
+    max-width: 210px;
+    height: clamp(120px, 24svh, 165px);
+    margin: 4px 0 12px;
+    padding: 7px 7px 18px;
     background: white;
-    box-shadow: 0 10px 25px rgba(51,82,107,0.16);
+    box-shadow: 0 8px 20px rgba(51,82,107,0.16);
     transform: rotate(-2deg);
   }
   .book-photo.tilt-right { transform: rotate(2deg); }
 
   .book-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  .book-decor { margin-top: 18px; font-size: 22px; letter-spacing: 5px; }
+  .book-decor { margin-top: 10px; font-size: 17px; letter-spacing: 4px; }
 
   .book-controls {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 18px;
-    margin-top: 20px;
+    gap: 14px;
+    margin-top: 12px;
   }
 
   .book-btn {
     border: none;
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     background: rgba(255,255,255,0.9);
     color: var(--dark-blue);
-    font-size: 20px;
+    font-size: 18px;
     box-shadow: 0 7px 18px rgba(51,82,107,0.14);
     cursor: pointer;
     transition: transform 0.2s ease;
   }
   .book-btn:active { transform: scale(0.9); }
 
-  .book-dots { display: flex; gap: 7px; align-items: center; }
-  .book-dot { width: 7px; height: 7px; border-radius: 50%; background: #c4d7e3; transition: all 0.25s ease; }
-  .book-dot.active { width: 20px; border-radius: 10px; background: var(--dark-blue); }
+  .book-dots { display: flex; gap: 6px; align-items: center; }
+  .book-dot { width: 6px; height: 6px; border-radius: 50%; background: #c4d7e3; transition: all 0.25s ease; }
+  .book-dot.active { width: 17px; border-radius: 10px; background: var(--dark-blue); }
 
-  .book-hint { text-align: center; margin-top: 12px; font-size: 11px; color: var(--warm-brown); opacity: 0.65; }
+  .book-hint { text-align: center; margin-top: 8px; font-size: 10px; color: var(--warm-brown); opacity: 0.65; }
 
-  @media (max-width: 390px) {
-    .book-card { min-height: 520px; padding: 28px 21px; }
-    .wish-text { font-size: 23px; }
-    .book-photo { height: 210px; }
+  @media (max-height: 700px) {
+    .book-card { padding: 14px 16px 10px; }
+    .wish-text { font-size: clamp(12.5px, 3.8vw, 15px); }
+    .book-photo { height: clamp(100px, 20svh, 140px); margin-bottom: 8px; }
+    .book-controls { margin-top: 8px; }
   }
 
-  /* ================= PAGE 3 — RANK THE LOVE ================= */
-  #page3 {
+  /* ================= PAGE 3 — RANK + SEND TO PLOY FLOW ================= */
+  .flow-screen {
     display: none;
     min-height: 100svh;
     width: 100%;
-    padding: 34px 20px 44px;
-    background: linear-gradient(180deg, #eaf5fb, #fbf3e6);
+    padding: 22px 18px 26px;
+    box-sizing: border-box;
     align-items: center;
     justify-content: center;
     text-align: center;
+    background: linear-gradient(180deg, #eaf5fb, #fbf3e6);
   }
+  .flow-screen.active { display: flex; }
 
   .rank-wrap { width: 100%; max-width: 390px; display: flex; flex-direction: column; align-items: center; }
 
   .rank-title {
     font-family: 'Mali', cursive;
     font-weight: 600;
-    font-size: 25px;
-    line-height: 1.45;
+    font-size: clamp(16px, 4.6vw, 19px);
+    line-height: 1.4;
     color: var(--dark-blue);
-    margin: 2px 0 6px;
+    margin: 0 0 3px;
   }
 
   .rank-sub {
     font-family: 'Quicksand', sans-serif;
-    font-size: 13px;
+    font-size: 10.5px;
     color: var(--warm-brown);
-    margin: 0 0 18px;
+    margin: 0 0 10px;
   }
 
   .rank-list {
     list-style: none;
-    margin: 0 0 8px;
+    margin: 0;
     padding: 0;
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
   }
 
   .rank-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     background: rgba(255,255,255,0.94);
-    border-radius: 14px;
-    padding: 11px 12px;
-    box-shadow: 0 6px 16px rgba(51,82,107,0.10);
+    border-radius: 12px;
+    padding: 7px 10px;
+    box-shadow: 0 5px 13px rgba(51,82,107,0.10);
     user-select: none;
-    transition: box-shadow 150ms ease;
+    cursor: pointer;
+    transition: background 180ms ease, transform 120ms ease;
   }
-  .rank-item.dragging { box-shadow: 0 14px 30px rgba(51,82,107,0.22); opacity: 0.92; z-index: 5; }
+  .rank-item:active { transform: scale(0.98); }
+  .rank-item.ranked {
+    background: linear-gradient(135deg, #eaf5fb, #dff0f8);
+    box-shadow: 0 6px 16px rgba(51,82,107,0.16);
+  }
 
-  .rank-num {
+  .rank-badge {
     flex: 0 0 auto;
-    width: 24px;
-    height: 24px;
+    width: 21px;
+    height: 21px;
     border-radius: 50%;
-    background: var(--soft-blue);
+    background: #e7eef3;
     color: var(--dark-blue);
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 10.5px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background 180ms ease, color 180ms ease;
   }
+  .rank-item.ranked .rank-badge { background: var(--dark-blue); color: #fff; }
 
   .rank-label {
     flex: 1 1 auto;
     text-align: left;
     font-family: 'Mali', cursive;
-    font-size: 14.5px;
+    font-size: clamp(11.5px, 3.3vw, 13.5px);
     color: var(--dark-blue);
-    line-height: 1.3;
+    line-height: 1.25;
   }
 
-  .drag-handle {
-    flex: 0 0 auto;
-    font-size: 18px;
+  .rank-reset {
+    margin-top: 8px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 10px;
     color: var(--warm-brown);
-    padding: 6px 6px;
-    cursor: grab;
-    touch-action: none;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
   }
 
-  .rank-footer {
-    font-family: 'Caveat', cursive;
-    font-size: 26px;
+  .rank-done {
+    display: none;
+    width: 100%;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(51,82,107,0.2);
+  }
+  .rank-done.show { display: block; animation: fadeUp 450ms ease forwards; }
+  .rank-done p {
+    font-family: 'Mali', cursive;
+    font-size: 13.5px;
+    font-weight: 600;
     color: var(--dark-blue);
-    margin-top: 22px;
+    margin: 0 0 10px;
+    line-height: 1.5;
+  }
+
+  @media (max-height: 700px) {
+    .rank-item { padding: 6px 9px; }
+    .rank-list { gap: 5px; }
+    .rank-done { margin-top: 8px; padding-top: 8px; }
+  }
+
+  /* ---- send-to-Ploy sub screens ---- */
+  .send-flow { width: min(88vw, 390px); text-align: center; font-family: 'Mali', cursive; color: var(--dark-blue); }
+
+  .send-emoji { font-size: 36px; margin-bottom: 8px; animation: cuteFloat 2s ease-in-out infinite; }
+  @keyframes cuteFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+  .send-title { font-family: 'Mali', cursive; font-size: clamp(19px, 5.5vw, 24px); font-weight: 700; line-height: 1.45; margin: 0 0 10px; }
+  .send-text { font-family: 'Mali', cursive; font-size: clamp(13.5px, 3.8vw, 16px); font-weight: 500; line-height: 1.7; margin: 0 auto 18px; }
+  .send-highlight { font-weight: 700; font-size: clamp(15px, 4.2vw, 18px); }
+
+  .send-countdown { font-family: 'Caveat', cursive; font-size: 46px; font-weight: 700; margin: 6px 0; }
+
+  .send-buttons { display: flex; gap: 12px; justify-content: center; margin-top: 18px; }
+
+  .send-btn {
+    border: none; border-radius: 999px; padding: 11px 19px;
+    font-family: 'Mali', cursive; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: transform 0.2s ease;
+    box-shadow: 0 6px 16px rgba(51, 82, 107, 0.15);
+  }
+  .send-btn:active { transform: scale(0.94); }
+  .btn-not-yet { background: #eaf5fb; color: var(--dark-blue); }
+  .btn-sent { background: #cfe7f5; color: var(--dark-blue); }
+
+  .send-card {
+    background: rgba(255, 255, 255, 0.88);
+    border-radius: 24px;
+    padding: 22px 18px;
+    box-shadow: 0 12px 32px rgba(51, 82, 107, 0.14);
+    animation: sendPop 0.6s ease;
+  }
+  .send-card img {
+    width: min(64vw, 220px);
+    max-height: 240px;
+    object-fit: cover;
+    border-radius: 18px;
+    margin-top: 12px;
+    box-shadow: 0 8px 20px rgba(51, 82, 107, 0.16);
+  }
+  @keyframes sendPop {
+    from { opacity: 0; transform: scale(0.88) translateY(12px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
   }
 
   @media (min-width: 640px) {
@@ -472,6 +591,8 @@
 </style>
 </head>
 <body>
+
+<div id="pageOverlay"></div>
 
 <div id="page1">
   <div class="glow glow-1"></div>
@@ -515,7 +636,7 @@
 <div id="page2">
   <div class="book">
 
-    <img class="mascot" alt="เพนกวิ้นเพื่อนซี้"
+    <img class="mascot mascot-sm" alt="เพนกวิ้นเพื่อนซี้"
       src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 170'%3E%3Cellipse cx='80' cy='120' rx='58' ry='44' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='128' rx='38' ry='30' fill='%23ffffff'/%3E%3Ccircle cx='80' cy='58' r='46' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='66' rx='30' ry='26' fill='%23ffffff'/%3E%3Cpath d='M58,54 Q66,47 74,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M86,54 Q94,47 102,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M72 66 L80 74 L88 66 Z' fill='%23e3a04f'/%3E%3Cellipse cx='55' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='105' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='34' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(18 34 118)'/%3E%3Cellipse cx='126' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(-18 126 118)'/%3E%3Cellipse cx='60' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3Cellipse cx='100' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3C/svg%3E">
 
     <!-- CARD 1 -->
@@ -571,6 +692,7 @@
       <p class="wish-text">ไม่ว่าจะเจอเรื่องอะไร<br>เค้าก็จะอยู่ข้างเทอนะ<br><strong>fr 💗</strong></p>
       <div class="book-decor">🫶🏻 💗 ✨</div>
       <button class="btn-continue btn-pray" id="toPage3">🙏 สาธุ ขอให้เป็นจริง</button>
+      <p class="pray-caption">กดแล้วส่งคำขอไปยังจักรวาล 🌌</p>
     </div>
 
     <!-- ปุ่มควบคุม -->
@@ -591,30 +713,89 @@
   </div>
 </div>
 
-<!-- PAGE 3 — จัดอันดับความรัก -->
+<!-- PAGE 3 — จัดอันดับความรัก + ส่งให้พลอย -->
 <div id="page3">
-  <div class="rank-wrap">
-    <img class="mascot" alt="เพนกวิ้นเพื่อนซี้"
-      src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 170'%3E%3Cellipse cx='80' cy='120' rx='58' ry='44' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='128' rx='38' ry='30' fill='%23ffffff'/%3E%3Ccircle cx='80' cy='58' r='46' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='66' rx='30' ry='26' fill='%23ffffff'/%3E%3Cpath d='M58,54 Q66,47 74,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M86,54 Q94,47 102,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M72 66 L80 74 L88 66 Z' fill='%23e3a04f'/%3E%3Cellipse cx='55' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='105' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='34' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(18 34 118)'/%3E%3Cellipse cx='126' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(-18 126 118)'/%3E%3Cellipse cx='60' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3Cellipse cx='100' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3C/svg%3E">
 
-    <p class="rank-title">ถ้าเลือกได้<br>เทอชอบให้เค้าทำอะไรให้เทอมากที่สุด?</p>
-    <p class="rank-sub">เรียงจากมาก → น้อยนะ<br>กดค้างที่ ☰ แล้วลากจัดอันดับได้เลย 💗</p>
+  <!-- SCREEN A: จัดอันดับ (แตะเพื่อจัดอันดับ ไม่ต้องลาก) -->
+  <section class="flow-screen active" id="rankScreen">
+    <div class="rank-wrap">
+      <img class="mascot mascot-sm" alt="เพนกวิ้นเพื่อนซี้"
+        src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 170'%3E%3Cellipse cx='80' cy='120' rx='58' ry='44' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='128' rx='38' ry='30' fill='%23ffffff'/%3E%3Ccircle cx='80' cy='58' r='46' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='66' rx='30' ry='26' fill='%23ffffff'/%3E%3Cpath d='M58,54 Q66,47 74,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M86,54 Q94,47 102,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M72 66 L80 74 L88 66 Z' fill='%23e3a04f'/%3E%3Cellipse cx='55' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='105' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='34' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(18 34 118)'/%3E%3Cellipse cx='126' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(-18 126 118)'/%3E%3Cellipse cx='60' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3Cellipse cx='100' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3C/svg%3E">
 
-    <ul class="rank-list" id="rankList">
-      <li class="rank-item"><span class="rank-num">1</span><span class="rank-label">ให้อิสระ ไม่จู้จี้</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">2</span><span class="rank-label">กอด หอม อ้อน ให้กำลังใจเทอ</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">3</span><span class="rank-label">เลี้ยงขนมบ่อย ๆ</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">4</span><span class="rank-label">พูดจาดี ๆ สุภาพกับเทอ</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">5</span><span class="rank-label">ตอบเทอเร็ว ๆ</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">6</span><span class="rank-label">บอกฝันดีเทอก่อนนอน</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">7</span><span class="rank-label">รายงานเทอทุกเรื่อง</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">8</span><span class="rank-label">พาเทอเที่ยวกลางคืนบ่อย ๆ</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">9</span><span class="rank-label">ขับรถให้เทอนั่ง</span><span class="drag-handle">☰</span></li>
-      <li class="rank-item"><span class="rank-num">10</span><span class="rank-label">พาเทอไปเปิดประสบการณ์ที่ใหม่ ๆ</span><span class="drag-handle">☰</span></li>
-    </ul>
+      <p class="rank-title">ถ้าเลือกได้ เทอชอบให้เค้า<br>ทำอะไรให้เทอมากที่สุด?</p>
+      <p class="rank-sub">แตะเรียงจากชอบมาก → น้อยนะ 💗</p>
 
-    <p class="rank-footer">Happy 25th, Swiss 🎂💗</p>
-  </div>
+      <ul class="rank-list" id="rankList">
+        <li class="rank-item" data-idx="0"><span class="rank-badge">✦</span><span class="rank-label">ให้อิสระ ไม่จู้จี้</span></li>
+        <li class="rank-item" data-idx="1"><span class="rank-badge">✦</span><span class="rank-label">กอด หอม อ้อน ให้กำลังใจเทอ</span></li>
+        <li class="rank-item" data-idx="2"><span class="rank-badge">✦</span><span class="rank-label">เลี้ยงขนมบ่อย ๆ</span></li>
+        <li class="rank-item" data-idx="3"><span class="rank-badge">✦</span><span class="rank-label">พูดจาดี ๆ สุภาพกับเทอ</span></li>
+        <li class="rank-item" data-idx="4"><span class="rank-badge">✦</span><span class="rank-label">ตอบเทอเร็ว ๆ</span></li>
+        <li class="rank-item" data-idx="5"><span class="rank-badge">✦</span><span class="rank-label">บอกฝันดีเทอก่อนนอน</span></li>
+        <li class="rank-item" data-idx="6"><span class="rank-badge">✦</span><span class="rank-label">รายงานเทอทุกเรื่อง</span></li>
+        <li class="rank-item" data-idx="7"><span class="rank-badge">✦</span><span class="rank-label">พาเทอเที่ยวกลางคืนบ่อย ๆ</span></li>
+        <li class="rank-item" data-idx="8"><span class="rank-badge">✦</span><span class="rank-label">ขับรถให้เทอนั่ง</span></li>
+        <li class="rank-item" data-idx="9"><span class="rank-badge">✦</span><span class="rank-label">พาเทอไปเปิดประสบการณ์ที่ใหม่ ๆ</span></li>
+      </ul>
+
+      <button class="rank-reset" id="rankReset" type="button">ล้างลำดับ ↺</button>
+
+      <div class="rank-done" id="rankDone">
+        <p>เสร็จแล้วว 🎉 แคปหน้าจอนี้ไว้ด้วยนะ<br>แล้วกดปุ่มด้านล่างเลยย 💗</p>
+        <button class="btn-continue btn-sent" type="button" onclick="goToSendStep2()">ทำเสร็จแย้ว 💗</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN B: countdown ส่งให้พลอย -->
+  <section class="flow-screen" id="sendStep2">
+    <div class="send-flow">
+      <div class="send-emoji">💌</div>
+      <h2 class="send-title">เอารูปที่แคป<br>ส่งให้พลอย NOW 💌</h2>
+      <p class="send-text">กำลังตรวจสอบความเรียบร้อย...</p>
+      <div class="send-countdown" id="countdown">5</div>
+    </div>
+  </section>
+
+  <!-- SCREEN C: ถามว่าส่งหรือยัง -->
+  <section class="flow-screen" id="sendStep3">
+    <div class="send-flow">
+      <div class="send-emoji">👀</div>
+      <h2 class="send-title">ส่งให้พลอยแล้วรึยังง</h2>
+      <p class="send-text">อย่าให้เค้าต้องถามซ้ำน้าา 😌💗</p>
+      <div class="send-buttons">
+        <button class="send-btn btn-not-yet" onclick="notSentYet()">ยังไม่ส่ง 🥺</button>
+        <button class="send-btn btn-sent" onclick="sentAlready()">ส่งแล้ว 💌</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN D: ยังไม่ส่ง -->
+  <section class="flow-screen" id="sendStep4">
+    <div class="send-flow">
+      <div class="send-emoji">😑</div>
+      <h2 class="send-title">ก็ส่งสิคะ...</h2>
+      <p class="send-text">อย่ามาเหลี่ยมมม 😂<br><span class="send-highlight">ส่งเดี๋ยวนี้น้าาา 💗</span></p>
+      <div class="send-buttons">
+        <button class="send-btn btn-not-yet" onclick="notSentAgain()">ยังไม่ส่ง 🥺</button>
+        <button class="send-btn btn-sent" onclick="sentAlready()">ส่งแล้วค่า 💌</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN E: ส่งแล้ว -->
+  <section class="flow-screen" id="sendStep5">
+    <div class="send-flow">
+      <div class="send-card">
+        <div class="send-emoji">🎉</div>
+        <h2 class="send-title">เก่งมากกกก 💗</h2>
+        <p class="send-text">แบบนี้ค่อยน่ารักหน่อยย 🥹<br>ขอบคุณที่ส่งให้พลอยนะ</p>
+        <img src="swissgengmak.jpg" alt="Swiss จุ๊บๆ">
+      </div>
+      <button class="btn-continue btn-pray" style="margin-top:18px;" onclick="goToIndex2()">ไปทำภารกิจกันต่อ 🎁</button>
+    </div>
+  </section>
+
 </div>
 
 <script>
@@ -650,6 +831,26 @@
     }, 460);
   }
 
+  /* "สาธุ" burst sign, then continue to page 3 */
+  function prayAndContinue() {
+    const burst = document.createElement('div');
+    burst.className = 'pray-burst';
+    burst.innerHTML = '🙏✨<span>ขอให้เป็นจริงน้า...</span>';
+    document.body.appendChild(burst);
+    setTimeout(() => {
+      burst.remove();
+      goToPage(document.getElementById('page2'), document.getElementById('page3'));
+    }, 900);
+  }
+
+  /* fade to index2.html */
+  function goToIndex2() {
+    const overlay = document.getElementById('pageOverlay');
+    overlay.style.pointerEvents = 'auto';
+    overlay.style.opacity = '1';
+    setTimeout(() => { window.location.href = 'index2.html'; }, 520);
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
     const penguin = document.getElementById('penguin');
     const pSwiss = document.getElementById('polaroid-swiss');
@@ -672,9 +873,7 @@
 
     const toPage3Btn = document.getElementById('toPage3');
     if (toPage3Btn) {
-      toPage3Btn.addEventListener('click', () => {
-        goToPage(document.getElementById('page2'), document.getElementById('page3'));
-      });
+      toPage3Btn.addEventListener('click', prayAndContinue);
     }
 
     /* ========= BIRTHDAY BOOK (page 2) ========= */
@@ -711,53 +910,81 @@
       else showCard(currentCard - 1);
     }, { passive: true });
 
-    /* ========= RANK THE LOVE (page 3, drag to reorder) ========= */
+    /* ========= RANK THE LOVE (page 3, tap to rank — no dragging needed) ========= */
     const rankList = document.getElementById('rankList');
-    if (rankList) {
-      let draggingEl = null;
+    const rankDone = document.getElementById('rankDone');
+    const rankReset = document.getElementById('rankReset');
+    let rankCount = 0;
 
-      function updateRankNumbers() {
-        rankList.querySelectorAll('.rank-item').forEach((item, i) => {
-          item.querySelector('.rank-num').textContent = i + 1;
-        });
-      }
+    function checkRankComplete() {
+      rankDone.classList.toggle('show', rankCount === 10);
+    }
 
-      function getDragAfterElement(container, y) {
-        const items = [...container.querySelectorAll('.rank-item:not(.dragging)')];
-        return items.reduce((closest, child) => {
-          const box = child.getBoundingClientRect();
-          const offset = y - box.top - box.height / 2;
-          if (offset < 0 && offset > closest.offset) {
-            return { offset, element: child };
+    function toggleRank(item) {
+      if (item.dataset.rank) {
+        const removed = parseInt(item.dataset.rank, 10);
+        delete item.dataset.rank;
+        item.classList.remove('ranked');
+        item.querySelector('.rank-badge').textContent = '✦';
+        rankList.querySelectorAll('.rank-item[data-rank]').forEach((el) => {
+          const r = parseInt(el.dataset.rank, 10);
+          if (r > removed) {
+            const newR = r - 1;
+            el.dataset.rank = newR;
+            el.querySelector('.rank-badge').textContent = newR;
           }
-          return closest;
-        }, { offset: -Infinity, element: null }).element;
+        });
+        rankCount--;
+      } else {
+        rankCount++;
+        item.dataset.rank = rankCount;
+        item.classList.add('ranked');
+        item.querySelector('.rank-badge').textContent = rankCount;
       }
+      checkRankComplete();
+    }
 
-      rankList.addEventListener('pointerdown', (e) => {
-        const handle = e.target.closest('.drag-handle');
-        if (!handle) return;
-        draggingEl = handle.closest('.rank-item');
-        draggingEl.setPointerCapture(e.pointerId);
-        draggingEl.classList.add('dragging');
+    if (rankList) {
+      rankList.querySelectorAll('.rank-item').forEach((item) => {
+        item.addEventListener('click', () => toggleRank(item));
       });
+    }
 
-      rankList.addEventListener('pointermove', (e) => {
-        if (!draggingEl) return;
-        const afterEl = getDragAfterElement(rankList, e.clientY);
-        if (afterEl == null) rankList.appendChild(draggingEl);
-        else rankList.insertBefore(draggingEl, afterEl);
+    if (rankReset) {
+      rankReset.addEventListener('click', () => {
+        rankList.querySelectorAll('.rank-item').forEach((item) => {
+          delete item.dataset.rank;
+          item.classList.remove('ranked');
+          item.querySelector('.rank-badge').textContent = '✦';
+        });
+        rankCount = 0;
+        checkRankComplete();
       });
+    }
 
-      function endDrag() {
-        if (!draggingEl) return;
-        draggingEl.classList.remove('dragging');
-        draggingEl = null;
-        updateRankNumbers();
-      }
+    /* ========= SEND FLOW ========= */
+    window.goToSendStep2 = function () {
+      showFlowScreen('sendStep2');
+      let count = 5;
+      const countdown = document.getElementById('countdown');
+      countdown.textContent = count;
+      const timer = setInterval(() => {
+        count--;
+        countdown.textContent = count;
+        if (count <= 0) {
+          clearInterval(timer);
+          setTimeout(() => { showFlowScreen('sendStep3'); }, 400);
+        }
+      }, 1000);
+    };
 
-      rankList.addEventListener('pointerup', endDrag);
-      rankList.addEventListener('pointercancel', endDrag);
+    window.notSentYet = function () { showFlowScreen('sendStep4'); };
+    window.notSentAgain = function () { showFlowScreen('sendStep3'); };
+    window.sentAlready = function () { showFlowScreen('sendStep5'); };
+
+    function showFlowScreen(id) {
+      document.querySelectorAll('#page3 .flow-screen').forEach((s) => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
     }
   });
 </script>
