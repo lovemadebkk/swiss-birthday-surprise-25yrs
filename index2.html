@@ -16,6 +16,9 @@
     --dark-blue: #33526b;
     --warm-brown: #9c7b5c;
     --gold: #e6b45a;
+    --pink: #f3c9d6;
+    --good: #4a9d63;
+    --bad: #c9585f;
     --shadow: rgba(51, 82, 107, 0.18);
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -36,82 +39,282 @@
   }
   #pageOverlay.hide { opacity: 0; }
 
+  /* ---------- standard global back button (same convention as index.html) ---------- */
+  .global-back {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 14px);
+    left: 14px;
+    z-index: 9980;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.88);
+    color: var(--dark-blue);
+    font-size: 17px; line-height: 1;
+    box-shadow: 0 6px 16px rgba(51, 82, 107, 0.18);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: transform 0.2s ease;
+  }
+  .global-back:active { transform: scale(0.9); }
+
+  /* ---------- persistent score badge (top-right) ---------- */
+  .score-badge {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 14px);
+    right: 12px;
+    z-index: 9980;
+    display: none;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,255,255,0.92);
+    border-radius: 999px;
+    padding: 8px 13px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--dark-blue);
+    box-shadow: 0 6px 16px rgba(51,82,107,0.18);
+    border: none;
+    cursor: pointer;
+  }
+  .score-badge.show { display: flex; }
+  .score-badge span.dim { font-weight: 500; color: var(--warm-brown); }
+
   .flow-screen {
     display: none;
     min-height: 100svh;
     width: 100%;
-    padding: 22px 18px 26px;
+    padding: 64px 18px 30px;
     box-sizing: border-box;
     align-items: center;
     justify-content: center;
     text-align: center;
   }
-  .flow-screen.active { display: flex; animation: fadeInSlide 480ms ease forwards; }
+  .flow-screen.active { display: flex; animation: fadeInSlide 460ms ease forwards; }
   @keyframes fadeInSlide { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
   .wrap { width: 100%; max-width: 390px; display: flex; flex-direction: column; align-items: center; }
 
   .mascot-sm {
-    width: 54px; margin: 0 auto 6px;
+    width: 50px; margin: 0 auto 6px;
     animation: mascotBob 3.2s ease-in-out infinite;
   }
   @keyframes mascotBob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-6px) rotate(3deg); } }
 
   .title {
     font-family: 'Mali', cursive; font-weight: 700;
-    font-size: clamp(19px, 5.5vw, 23px); line-height: 1.4;
+    font-size: clamp(18px, 5.2vw, 22px); line-height: 1.4;
     margin: 0 0 6px; color: var(--dark-blue);
   }
   .subtitle {
-    font-family: 'Quicksand', sans-serif; font-size: 12px;
+    font-family: 'Quicksand', sans-serif; font-size: 11.5px;
     color: var(--warm-brown); margin: 0 0 14px; line-height: 1.6;
   }
+  .eng-accent { font-family: 'Caveat', cursive; font-weight: 700; font-size: 1.25em; }
 
-  /* ---------- intro / reward table ---------- */
-  .reward-table {
-    width: 100%; border-collapse: collapse; margin: 6px 0 16px;
-    background: rgba(255,255,255,0.9); border-radius: 14px; overflow: hidden;
-    box-shadow: 0 8px 20px rgba(51,82,107,0.1);
-  }
-  .reward-table td {
-    font-family: 'Mali', cursive; font-size: 12px; padding: 8px 10px;
-    border-bottom: 1px solid rgba(51,82,107,0.08); text-align: left;
-  }
-  .reward-table tr:last-child td { border-bottom: none; }
-  .reward-table td.score-col { font-weight: 700; color: var(--dark-blue); white-space: nowrap; width: 84px; }
-  .mission-list { width: 100%; text-align: left; margin: 0 0 16px; padding: 0; list-style: none; }
+  /* ---------- Page 4.1 mission menu list ---------- */
+  .mission-list { width: 100%; text-align: left; margin: 0 0 14px; padding: 0; list-style: none; }
   .mission-list li {
-    font-family: 'Mali', cursive; font-size: 13px; color: var(--dark-blue);
-    background: rgba(255,255,255,0.9); border-radius: 12px; padding: 9px 12px;
-    margin-bottom: 8px; box-shadow: 0 5px 14px rgba(51,82,107,0.08);
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Mali', cursive; font-size: 12.5px; color: var(--dark-blue);
+    background: rgba(255,255,255,0.92); border-radius: 14px; padding: 9px 12px;
+    margin-bottom: 7px; box-shadow: 0 5px 14px rgba(51,82,107,0.08);
   }
-  .mission-list b { color: var(--warm-brown); }
+  .mission-list .m-num {
+    flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--soft-blue); color: var(--dark-blue); font-family: 'Quicksand';
+    font-weight: 700; font-size: 10.5px; display: flex; align-items: center; justify-content: center;
+  }
+  .mission-list .m-icon { flex: 0 0 auto; font-size: 17px; }
+  .mission-list .m-body { flex: 1 1 auto; }
+  .mission-list .m-pts { flex: 0 0 auto; font-family: 'Quicksand'; font-weight: 700; font-size: 10px; color: var(--warm-brown); }
+
+  /* ---------- reward list (card style, not a stiff table) ---------- */
+  .reward-list { width: 100%; margin: 4px 0 6px; padding: 0; list-style: none; }
+  .reward-list li {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.9); border-radius: 13px; padding: 8px 12px;
+    margin-bottom: 6px; box-shadow: 0 4px 12px rgba(51,82,107,0.07);
+  }
+  .reward-list .r-range {
+    flex: 0 0 auto; font-family: 'Quicksand'; font-weight: 700; font-size: 11px;
+    color: var(--dark-blue); background: var(--soft-blue-2); border-radius: 8px;
+    padding: 4px 7px; white-space: nowrap;
+  }
+  .reward-list .r-name { font-family: 'Mali', cursive; font-size: 12px; color: var(--dark-blue); text-align: left; }
+  .reward-remark {
+    font-family: 'Quicksand', sans-serif; font-size: 9.5px; color: var(--warm-brown);
+    opacity: 0.8; line-height: 1.6; margin: 6px 0 16px; text-align: left;
+  }
 
   .btn {
-    border: none; border-radius: 999px; padding: 14px 28px;
-    font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 15px;
+    border: none; border-radius: 999px; padding: 14px 26px;
+    font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 14.5px;
     background: linear-gradient(135deg, var(--soft-blue), #dff0f8);
     color: var(--dark-blue); box-shadow: 0 10px 22px var(--shadow);
     cursor: pointer; transition: transform 0.2s ease;
   }
   .btn:active { transform: scale(0.94); }
   .btn-gold { background: linear-gradient(135deg, #ffe9c9, #fff6e6); box-shadow: 0 12px 26px rgba(230,180,90,0.35); }
+  .btn-sm { padding: 10px 18px; font-size: 12.5px; }
+  .btn-outline { background: rgba(255,255,255,0.7); box-shadow: 0 6px 16px rgba(51,82,107,0.1); }
 
-  /* ---------- memory match ---------- */
-  .mem-status {
-    display: flex; justify-content: space-between; width: 100%;
-    font-family: 'Quicksand', sans-serif; font-size: 11.5px; color: var(--warm-brown);
+  /* ---------- "good luck" transition sign ---------- */
+  .sign-burst {
+    position: fixed; inset: 0; z-index: 9997;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: rgba(255, 246, 230, 0.95);
+    font-size: 44px; text-align: center;
+    animation: prayBurst 950ms ease forwards;
+  }
+  .sign-burst span {
+    display: block; font-family: 'Mali', cursive; font-size: 18px; font-weight: 600;
+    color: var(--dark-blue); margin-top: 10px;
+  }
+  @keyframes prayBurst {
+    0% { opacity: 0; transform: scale(0.7); }
+    25% { opacity: 1; transform: scale(1.06); }
+    75% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.08); }
+  }
+
+  /* ---------- Page 5 game hub ---------- */
+  .total-card {
+    width: 100%; background: rgba(255,255,255,0.94); border-radius: 18px;
+    padding: 14px 16px; margin-bottom: 14px; box-shadow: 0 10px 24px rgba(51,82,107,0.12);
+  }
+  .total-card .t-label { font-family: 'Quicksand'; font-size: 10.5px; color: var(--warm-brown); letter-spacing: 0.03em; }
+  .total-card .t-score { font-family: 'Caveat', cursive; font-size: 34px; font-weight: 700; color: var(--dark-blue); margin: 2px 0 6px; }
+  .progress-track { width: 100%; height: 9px; border-radius: 999px; background: #e4eef3; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--soft-blue), var(--gold)); transition: width 0.5s ease; width: 0%; }
+  .total-card .t-actions { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
+
+  .game-list { width: 100%; display: flex; flex-direction: column; gap: 9px; margin-bottom: 6px; }
+  .game-card {
+    display: flex; align-items: center; gap: 11px;
+    background: rgba(255,255,255,0.94); border: none; border-radius: 17px;
+    padding: 12px 13px; box-shadow: 0 8px 20px rgba(51,82,107,0.1);
+    cursor: pointer; transition: transform 0.15s ease; text-align: left; width: 100%;
+    font-family: inherit;
+  }
+  .game-card:active { transform: scale(0.97); }
+  .game-card .g-icon {
+    flex: 0 0 auto; width: 42px; height: 42px; border-radius: 50%;
+    background: var(--soft-blue-2); display: flex; align-items: center; justify-content: center;
+    font-size: 21px;
+  }
+  .game-card .g-info { flex: 1 1 auto; min-width: 0; }
+  .game-card .g-name { font-family: 'Mali', cursive; font-weight: 700; font-size: 13.5px; color: var(--dark-blue); }
+  .game-card .g-desc { font-family: 'Quicksand'; font-size: 10px; color: var(--warm-brown); margin-top: 1px; }
+  .game-card .g-status { flex: 0 0 auto; font-family: 'Quicksand'; font-weight: 700; font-size: 11px; color: var(--dark-blue); text-align: right; }
+  .game-card.completed { background: linear-gradient(135deg, #eaf5fb, #dff0f8); }
+  .game-card.completed .g-status { color: var(--good); }
+
+  .hub-hint { font-family: 'Quicksand'; font-size: 10px; color: var(--warm-brown); opacity: 0.75; margin-top: 4px; }
+
+  /* ---------- modal (rules + reward reminder) ---------- */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 9990;
+    background: rgba(51,82,107,0.45);
+    align-items: center; justify-content: center; padding: 22px;
+  }
+  .modal-overlay.show { display: flex; animation: fadeInSlide 250ms ease forwards; }
+  .modal-box {
+    position: relative; width: 100%; max-width: 340px;
+    background: var(--white); border-radius: 22px; padding: 26px 20px 22px;
+    box-shadow: 0 20px 50px rgba(51,82,107,0.3);
+    max-height: 82svh; overflow-y: auto;
+  }
+  .modal-close {
+    position: absolute; top: 10px; right: 10px;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--soft-blue-2); border: none; font-size: 13px;
+    color: var(--dark-blue); cursor: pointer;
+  }
+  .modal-icon { font-size: 32px; margin-bottom: 4px; }
+  .modal-title { font-family: 'Mali', cursive; font-weight: 700; font-size: 16.5px; margin: 0 0 10px; }
+  .modal-rule { font-family: 'Quicksand'; font-size: 12px; line-height: 1.75; color: var(--dark-blue); margin: 0 0 18px; text-align: left; }
+  .modal-reward-title { font-family: 'Mali', cursive; font-weight: 700; font-size: 15px; margin: 0 0 10px; }
+
+  /* ---------- shared game chrome ---------- */
+  .game-header {
+    width: 100%; display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Mali', cursive; font-weight: 700; font-size: 14px; color: var(--dark-blue);
     margin-bottom: 8px;
   }
-  .mem-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 7px; width: 100%; max-width: 340px; margin-bottom: 14px;
+  .game-header .g-count { font-family: 'Quicksand'; font-weight: 700; font-size: 11px; color: var(--warm-brown); }
+
+  .timer-track, .progress-track-sm {
+    width: 100%; height: 6px; border-radius: 999px; background: #e4eef3; overflow: hidden; margin-bottom: 12px;
   }
+  .timer-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--pink), var(--gold)); width: 100%; }
+
+  .quiz-q { font-family: 'Mali', cursive; font-weight: 600; font-size: clamp(14.5px, 4.2vw, 17px); line-height: 1.55; margin: 0 0 14px; color: var(--dark-blue); }
+  .quiz-options { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-bottom: 6px; }
+  .quiz-opt {
+    font-family: 'Mali', cursive; font-size: 13px; text-align: left;
+    background: rgba(255,255,255,0.92); border: 2px solid transparent; border-radius: 12px;
+    padding: 10px 13px; cursor: pointer; color: var(--dark-blue);
+    box-shadow: 0 5px 13px rgba(51,82,107,0.08); transition: all 150ms ease;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .quiz-opt .swatch { width: 16px; height: 16px; border-radius: 50%; flex: 0 0 auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08); }
+  .quiz-opt.correct { border-color: var(--good); background: #eafaf0; }
+  .quiz-opt.incorrect { border-color: var(--bad); background: #fdecec; }
+  .quiz-opt.disabled { pointer-events: none; }
+
+  .next-btn-wrap { margin-top: 6px; }
+
+  .feedback-badge {
+    position: fixed; top: 38%; left: 50%; transform: translate(-50%, -50%);
+    font-family: 'Caveat', cursive; font-size: 38px; font-weight: 700;
+    z-index: 9996; pointer-events: none;
+    animation: feedbackPop 750ms ease forwards;
+  }
+  .feedback-badge.correct { color: var(--good); }
+  .feedback-badge.wrong { color: var(--bad); }
+  @keyframes feedbackPop {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+    30% { opacity: 1; transform: translate(-50%, -50%) scale(1.12); }
+    70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -65%) scale(1); }
+  }
+
+  .points-pop {
+    position: fixed; top: 30%; left: 50%; transform: translate(-50%, -50%);
+    font-family: 'Quicksand'; font-weight: 700; font-size: 15px; color: var(--good);
+    background: rgba(255,255,255,0.92); border-radius: 999px; padding: 5px 12px;
+    z-index: 9996; pointer-events: none; animation: pointsPop 900ms ease forwards;
+  }
+  @keyframes pointsPop { 0%{opacity:0; transform:translate(-50%,-40%) scale(0.8);} 25%{opacity:1; transform:translate(-50%,-50%) scale(1);} 75%{opacity:1;} 100%{opacity:0; transform:translate(-50%,-80%) scale(1);} }
+
+  .combo-badge {
+    position: fixed; top: 22%; left: 50%; transform: translate(-50%,-50%);
+    font-family: 'Caveat', cursive; font-weight: 700; font-size: 26px; color: var(--gold);
+    z-index: 9996; pointer-events: none; animation: pointsPop 900ms ease forwards;
+  }
+
+  .toast-banner {
+    position: fixed; top: calc(env(safe-area-inset-top,0px) + 14px); left: 50%; transform: translateX(-50%);
+    background: var(--dark-blue); color: #fff; font-family: 'Quicksand'; font-weight: 700; font-size: 12px;
+    padding: 9px 18px; border-radius: 999px; z-index: 9998; box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    opacity: 0; animation: toastInOut 1600ms ease forwards;
+  }
+  @keyframes toastInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    85% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  }
+
+  /* ---------- Game 2: memory match ---------- */
+  .mem-status { display: flex; justify-content: space-between; width: 100%; font-family: 'Quicksand'; font-size: 11px; color: var(--warm-brown); margin-bottom: 8px; }
+  .mem-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; width: 100%; max-width: 320px; margin-bottom: 10px; }
   .mem-card {
     aspect-ratio: 1 / 1; border-radius: 12px; border: none;
     background: linear-gradient(135deg, var(--soft-blue), #dff0f8);
     box-shadow: 0 6px 14px rgba(51,82,107,0.14);
-    font-size: clamp(18px, 6vw, 26px);
+    font-size: clamp(17px, 5.6vw, 24px);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; transition: transform 150ms ease, background 150ms ease;
   }
@@ -120,336 +323,426 @@
   .mem-card.matched { background: linear-gradient(135deg, #eaf5fb, #dff0f8); opacity: 0.55; cursor: default; }
   .mem-card.wrong { animation: shakeCard 350ms ease; }
   @keyframes shakeCard { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-4px);} 75%{transform:translateX(4px);} }
+  .mem-rate-note { font-family: 'Quicksand'; font-size: 9.5px; color: var(--warm-brown); opacity: 0.8; margin-top: 4px; }
 
-  /* ---------- quiz ---------- */
-  .quiz-progress { display: flex; gap: 5px; margin-bottom: 14px; }
-  .quiz-dot { width: 6px; height: 6px; border-radius: 50%; background: #c4d7e3; }
-  .quiz-dot.active { width: 16px; border-radius: 8px; background: var(--dark-blue); }
-  .quiz-dot.done { background: var(--gold); }
-
-  .quiz-q {
-    font-family: 'Mali', cursive; font-weight: 600; font-size: clamp(15px, 4.4vw, 18px);
-    line-height: 1.5; margin: 0 0 16px; color: var(--dark-blue);
+  /* ---------- Game 3: where is this ---------- */
+  .puzzle-wrap {
+    position: relative; width: 100%; max-width: 280px; aspect-ratio: 1 / 1;
+    margin: 0 auto 10px; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 12px 28px rgba(51,82,107,0.18);
   }
-  .quiz-options { width: 100%; display: flex; flex-direction: column; gap: 8px; }
-  .quiz-opt {
-    font-family: 'Mali', cursive; font-size: 13.5px; text-align: left;
-    background: rgba(255,255,255,0.9); border: 2px solid transparent; border-radius: 12px;
-    padding: 10px 14px; cursor: pointer; color: var(--dark-blue);
-    box-shadow: 0 5px 14px rgba(51,82,107,0.08); transition: all 150ms ease;
-  }
-  .quiz-opt.correct { border-color: #7bbf8a; background: #eafaf0; }
-  .quiz-opt.incorrect { border-color: #e39a9a; background: #fdecec; }
-  .quiz-opt.disabled { pointer-events: none; }
+  .puzzle-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .puzzle-grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr); }
+  .puzzle-cell { background: rgba(207,231,245,0.97); border: 0.5px solid rgba(255,255,255,0.35); cursor: pointer; transition: opacity 250ms ease; }
+  .puzzle-cell.opened { opacity: 0; pointer-events: none; }
+  .puzzle-status { font-family: 'Quicksand'; font-size: 11px; color: var(--warm-brown); margin-bottom: 8px; }
+  .puzzle-actions { display: flex; gap: 8px; justify-content: center; margin-bottom: 10px; }
 
-  /* ---------- results ---------- */
-  .score-big { font-family: 'Caveat', cursive; font-size: 58px; font-weight: 700; margin: 4px 0; color: var(--dark-blue); }
-  .score-sub { font-family: 'Quicksand', sans-serif; font-size: 12px; color: var(--warm-brown); margin-bottom: 14px; }
-  .reward-card {
+  /* ---------- game result screen ---------- */
+  .result-icon { font-size: 46px; margin-bottom: 6px; animation: sparklePop 700ms ease; }
+  @keyframes sparklePop { 0%{transform:scale(0.5);opacity:0;} 60%{transform:scale(1.1);opacity:1;} 100%{transform:scale(1);} }
+  .result-score { font-family: 'Caveat', cursive; font-size: 50px; font-weight: 700; color: var(--dark-blue); margin: 2px 0 4px; }
+  .result-sub { font-family: 'Quicksand'; font-size: 12px; color: var(--warm-brown); margin-bottom: 18px; }
+
+  /* ---------- final result / mission complete ---------- */
+  .final-total { font-family: 'Caveat', cursive; font-size: 56px; font-weight: 700; color: var(--dark-blue); margin: 4px 0; }
+  .breakdown-list { width: 100%; list-style: none; margin: 12px 0 14px; padding: 0; }
+  .breakdown-list li {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Mali', cursive; font-size: 12.5px; color: var(--dark-blue);
+    background: rgba(255,255,255,0.9); border-radius: 12px; padding: 8px 12px;
+    margin-bottom: 6px; box-shadow: 0 4px 12px rgba(51,82,107,0.07);
+  }
+  .breakdown-list .b-score { font-family: 'Quicksand'; font-weight: 700; }
+  .breakdown-list .b-score.done { color: var(--good); }
+  .reward-final-card {
     width: 100%; background: rgba(255,255,255,0.94); border-radius: 20px;
-    padding: 20px 18px; box-shadow: 0 14px 32px rgba(51,82,107,0.16);
-    margin-bottom: 16px;
+    padding: 18px 16px; box-shadow: 0 14px 32px rgba(51,82,107,0.16); margin-bottom: 14px;
   }
-  .reward-card img { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; box-shadow: 0 6px 16px rgba(51,82,107,0.18); }
-  .reward-label { font-family: 'Mali', cursive; font-weight: 700; font-size: 17px; margin: 0 0 6px; }
-  .reward-code {
-    font-family: 'Caveat', cursive; font-size: 26px; letter-spacing: 2px;
-    background: linear-gradient(135deg, #ffe9c9, #fff6e6); border-radius: 10px;
-    padding: 6px 16px; display: inline-block; margin-top: 6px; color: var(--dark-blue);
-  }
-  .wish-note { font-family: 'Mali', cursive; font-size: 13px; line-height: 1.6; color: var(--dark-blue); margin-top: 10px; }
+  .reward-final-label { font-family: 'Mali', cursive; font-weight: 700; font-size: 16px; margin: 4px 0 0; }
 
   .confetti-piece {
     position: fixed; top: -10px; width: 8px; height: 14px; opacity: 0.9;
     animation: confettiFall linear forwards; z-index: 20;
   }
-  @keyframes confettiFall {
-    to { transform: translateY(110vh) rotate(540deg); opacity: 0.2; }
-  }
+  @keyframes confettiFall { to { transform: translateY(110vh) rotate(540deg); opacity: 0.2; } }
 
   @media (max-height: 700px) {
-    .mission-list li { padding: 7px 10px; margin-bottom: 6px; }
-    .mem-grid { gap: 5px; margin-bottom: 10px; }
-    .reward-card { padding: 16px 14px; }
+    .flow-screen { padding-top: 54px; }
+    .mission-list li, .reward-list li, .breakdown-list li { padding: 7px 10px; margin-bottom: 5px; }
+    .mem-grid { gap: 5px; }
+    .puzzle-wrap { max-width: 240px; }
   }
 </style>
 </head>
 <body>
 
 <div id="pageOverlay"></div>
+<button class="global-back" id="globalBackBtn" type="button" aria-label="ย้อนกลับ">←</button>
+<button class="score-badge" id="scoreBadge" type="button">🏆 <span id="scoreBadgeVal">0</span> / 500 <span class="dim">ดูรางวัล</span></button>
 
-<!-- SCREEN 1: อธิบายภารกิจ + ตารางรางวัล -->
-<section class="flow-screen active" id="introScreen">
+<!-- ============================================================
+     PAGE 4.1 — MISSION MENU (overview, main-menu style)
+     ============================================================ -->
+<section class="flow-screen active" id="msIntro">
   <div class="wrap">
-    <img class="mascot-sm" alt="เพนกวิ้น"
-      src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 170'%3E%3Cellipse cx='80' cy='120' rx='58' ry='44' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='128' rx='38' ry='30' fill='%23ffffff'/%3E%3Ccircle cx='80' cy='58' r='46' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='66' rx='30' ry='26' fill='%23ffffff'/%3E%3Cpath d='M58,54 Q66,47 74,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M86,54 Q94,47 102,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M72 66 L80 74 L88 66 Z' fill='%23e3a04f'/%3E%3Cellipse cx='55' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='105' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='34' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(18 34 118)'/%3E%3Cellipse cx='126' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(-18 126 118)'/%3E%3Cellipse cx='60' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3Cellipse cx='100' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3C/svg%3E">
+    <img class="mascot-sm" alt="เพนกวิ้น" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 170'%3E%3Cellipse cx='80' cy='120' rx='58' ry='44' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='128' rx='38' ry='30' fill='%23ffffff'/%3E%3Ccircle cx='80' cy='58' r='46' fill='%23cfe7f5'/%3E%3Cellipse cx='80' cy='66' rx='30' ry='26' fill='%23ffffff'/%3E%3Cpath d='M58,54 Q66,47 74,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M86,54 Q94,47 102,54' stroke='%2333526b' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3Cpath d='M72 66 L80 74 L88 66 Z' fill='%23e3a04f'/%3E%3Cellipse cx='55' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='105' cy='68' rx='7' ry='5' fill='%23f2c7c2' opacity='0.7'/%3E%3Cellipse cx='34' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(18 34 118)'/%3E%3Cellipse cx='126' cy='118' rx='13' ry='24' fill='%23cfe7f5' transform='rotate(-18 126 118)'/%3E%3Cellipse cx='60' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3Cellipse cx='100' cy='168' rx='12' ry='6' fill='%23e3a04f'/%3E%3C/svg%3E">
 
-    <p class="title">ภารกิจลับก่อนได้รางวัล 🎁</p>
-    <p class="subtitle">มี 2 ภารกิจ คะแนนเต็ม 200<br>สะสมคะแนนแลกของรางวัลได้เลยย</p>
+    <p class="title">Birthday Mini Game 🎮</p>
+    <p class="subtitle">มีทั้งหมด <b>5 ภารกิจ</b> เกมละ 100 คะแนน<br>เล่นครบ ระบบจะรวมคะแนนให้อัตโนมัติ<br>เพื่อนำไปแลกของรางวัลตอนท้าย 🎁</p>
 
-    <ul class="mission-list">
-      <li><b>ภารกิจ 1</b> — จับคู่ความทรงจำ 💑 (100 คะแนน)</li>
-      <li><b>ภารกิจ 2</b> — ควิซความรัก 💭 (100 คะแนน)</li>
-    </ul>
+    <ul class="mission-list" id="msMissionList"></ul>
 
-    <table class="reward-table" id="rewardTable"></table>
-
-    <button class="btn btn-gold" id="startMissionBtn">เริ่มภารกิจ 1 💑</button>
+    <button class="btn btn-gold" id="toRewardBtn">ดูกติกาคะแนน+รางวัล →</button>
   </div>
 </section>
 
-<!-- SCREEN 2: เกมจับคู่ Memory Match -->
-<section class="flow-screen" id="memoryScreen">
+<!-- ============================================================
+     PAGE 4.2 — SCORE & REWARD RULES
+     ============================================================ -->
+<section class="flow-screen" id="msReward">
   <div class="wrap">
-    <p class="title">ภารกิจ 1: จับคู่ความทรงจำ 💑</p>
-    <p class="subtitle">พลิกไพ่ให้เจอคู่ ยิ่งพลิกน้อย ยิ่งได้คะแนนเยอะ</p>
-    <div class="mem-status">
-      <span id="memMoves">พลิกไปแล้ว: 0</span>
-      <span id="memPairs">จับคู่ได้: 0 / 8</span>
-    </div>
-    <div class="mem-grid" id="memGrid"></div>
+    <p class="title">คะแนน &amp; รางวัล 🎁</p>
+    <p class="subtitle">คะแนนเต็ม <b>500</b> — สะสมจาก 5 ภารกิจ<br>ยิ่งได้เยอะ ของรางวัลยิ่งน่ารักขึ้นเรื่อยๆ</p>
+
+    <ul class="reward-list" id="rewardList"></ul>
+
+    <p class="reward-remark" id="rewardRemark"></p>
+
+    <button class="btn btn-gold" id="readyBtn">พร้อมเริ่มภารกิจรึยังงงง 🙋‍♀️</button>
   </div>
 </section>
 
-<!-- SCREEN 3: ควิซความรัก -->
-<section class="flow-screen" id="quizScreen">
+<!-- ============================================================
+     PAGE 5 — GAME HUB (choose which mission to play)
+     ============================================================ -->
+<section class="flow-screen" id="hub">
   <div class="wrap">
-    <p class="title">ภารกิจ 2: ควิซความรัก 💭</p>
-    <div class="quiz-progress" id="quizProgress"></div>
-    <p class="quiz-q" id="quizQuestion"></p>
-    <div class="quiz-options" id="quizOptions"></div>
-  </div>
-</section>
+    <p class="title">เลือกภารกิจที่จะเล่น 🎯</p>
+    <p class="subtitle">แตะที่ชื่อเกมเพื่อดูกติกาก่อนเริ่มเล่นน้า</p>
 
-<!-- SCREEN 4: ผลลัพธ์ + รางวัล -->
-<section class="flow-screen" id="resultScreen">
-  <div class="wrap">
-    <p class="title" id="resultTitle">ผลลัพธ์รวม 🎉</p>
-    <div class="score-big" id="scoreBig">0 / 200</div>
-    <p class="score-sub" id="scoreSub"></p>
-
-    <div class="reward-card" id="rewardCard">
-      <img id="rewardPhoto" src="" alt="รูปแฟน">
-      <p class="reward-label" id="rewardLabel"></p>
-      <div id="rewardCodeBox" style="display:none;">
-        <div class="reward-code" id="rewardCode"></div>
+    <div class="total-card">
+      <div class="t-label">TOTAL SCORE</div>
+      <div class="t-score" id="hubTotalScore">0 / 500</div>
+      <div class="progress-track"><div class="progress-fill" id="hubProgressFill"></div></div>
+      <div class="t-actions">
+        <button class="btn btn-sm btn-outline" id="viewRewardFromHubBtn">ทวนรางวัล 🎁</button>
+        <button class="btn btn-sm btn-outline" id="resetAllBtn">เริ่มใหม่ทั้งหมด ↺</button>
       </div>
-      <p class="wish-note" id="wishNote"></p>
     </div>
 
-    <button class="btn" id="retryBtn" style="display:none;">ลองใหม่อีกครั้ง 🔄</button>
+    <div class="game-list" id="gameList"></div>
+    <p class="hub-hint" id="hubHint"></p>
   </div>
 </section>
+
+<!-- ============================================================
+     GAME 01 — SPEED QUIZ (ถามไวตอบไว)
+     ============================================================ -->
+<section class="flow-screen" id="g1Screen">
+  <div class="wrap">
+    <div class="game-header">⚡ ถามไวตอบไว <span class="g-count" id="g1Count">1 / 10</span></div>
+    <div class="timer-track"><div class="timer-fill" id="g1TimerFill"></div></div>
+    <p class="quiz-q" id="g1Question"></p>
+    <div class="quiz-options" id="g1Options"></div>
+    <div class="next-btn-wrap" id="g1NextWrap" style="display:none;">
+      <button class="btn btn-sm" id="g1NextBtn">ข้อต่อไป →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     GAME 02 — MEMORY MATCH (จับคู่ให้ไว)
+     ============================================================ -->
+<section class="flow-screen" id="g2Screen">
+  <div class="wrap">
+    <div class="game-header">🧩 จับคู่ให้ไว</div>
+    <div class="mem-status">
+      <span id="g2Moves">พลิกไปแล้ว: 0</span>
+      <span id="g2Pairs">จับคู่ได้: 0 / 8</span>
+    </div>
+    <div class="mem-grid" id="g2Grid"></div>
+    <p class="mem-rate-note">พลิกครบ 8 ครั้งพอดี = 100 คะแนน หลังจากนั้นลด 6 แต้ม/ครั้ง (ต่ำสุด 30)</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     GAME 03 — WHERE IS THIS? (นี่ที่ไหน?)
+     ============================================================ -->
+<section class="flow-screen" id="g3Screen">
+  <div class="wrap">
+    <div class="game-header">📍 นี่ที่ไหน?</div>
+    <p class="puzzle-status" id="g3Status">เปิดไปแล้ว 5 / 36 ช่อง (ฟรี 5 ช่องแรก)</p>
+    <div class="puzzle-wrap">
+      <img class="puzzle-img" id="g3Img" src="ployswisspuzzle.jpg" alt="สถานที่ลับ">
+      <div class="puzzle-grid" id="g3Grid"></div>
+    </div>
+    <div class="puzzle-actions" id="g3ActionWrap">
+      <button class="btn btn-sm btn-gold" id="g3GuessBtn">รู้แล้ววว! 🙋‍♀️</button>
+    </div>
+    <div class="quiz-options" id="g3Options" style="display:none;"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     GAME 04 — RIDDLES (ปัญหาเชาว์)
+     ============================================================ -->
+<section class="flow-screen" id="g4Screen">
+  <div class="wrap">
+    <div class="game-header">🕵️ ปัญหาเชาว์ <span class="g-count" id="g4Count">1 / 10</span></div>
+    <div class="progress-track-sm"><div class="progress-fill" id="g4ProgressFill" style="width:10%;"></div></div>
+    <p class="quiz-q" id="g4Question"></p>
+    <div class="quiz-options" id="g4Options"></div>
+    <div class="next-btn-wrap" id="g4NextWrap" style="display:none;">
+      <button class="btn btn-sm" id="g4NextBtn">ข้อต่อไป →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     GAME 05 — GUESS PLOY (แฟนพันธ์แท้พลอย)
+     ============================================================ -->
+<section class="flow-screen" id="g5Screen">
+  <div class="wrap">
+    <div class="game-header">🎯 แฟนพันธ์แท้พลอย <span class="g-count" id="g5Count">1 / 10</span></div>
+    <div class="timer-track"><div class="timer-fill" id="g5TimerFill"></div></div>
+    <p class="quiz-q" id="g5Question"></p>
+    <div class="quiz-options" id="g5Options" style="display:none;"></div>
+    <div class="next-btn-wrap" id="g5NextWrap" style="display:none;">
+      <button class="btn btn-sm" id="g5NextBtn">ข้อต่อไป →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SHARED — GAME RESULT (shown right after finishing any game)
+     ============================================================ -->
+<section class="flow-screen" id="gameResultScreen">
+  <div class="wrap">
+    <div class="result-icon" id="grIcon">🎉</div>
+    <p class="title" id="grTitle">MISSION COMPLETE!</p>
+    <div class="result-score" id="grScore">0 / 100</div>
+    <p class="result-sub" id="grSub"></p>
+    <button class="btn btn-gold" id="grContinueBtn">ต่อ →</button>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 4.2 (RESULT) — MISSION COMPLETE / FINAL SCORE + REWARD
+     ============================================================ -->
+<section class="flow-screen" id="finalResultScreen">
+  <div class="wrap">
+    <p class="title">MISSION COMPLETE! 🎉</p>
+    <div class="total-card" style="text-align:center;">
+      <div class="t-label">TOTAL SCORE</div>
+      <div class="final-total" id="finalTotal">0 / 500</div>
+      <div class="progress-track"><div class="progress-fill" id="finalProgressFill"></div></div>
+    </div>
+
+    <ul class="breakdown-list" id="breakdownList"></ul>
+
+    <div class="reward-final-card">
+      <div style="font-size:30px;">🎁</div>
+      <p class="reward-final-label" id="finalRewardLabel"></p>
+      <p class="reward-remark" style="margin-top:8px;" id="finalRewardRemark"></p>
+    </div>
+
+    <button class="btn btn-outline btn-sm" id="finalResetBtn">เริ่มใหม่ทั้งหมด ↺</button>
+  </div>
+</section>
+
+<!-- ============================================================
+     MODAL — GAME RULES (same shape for every game)
+     ============================================================ -->
+<div class="modal-overlay" id="ruleModal">
+  <div class="modal-box">
+    <button class="modal-close" id="ruleModalClose" aria-label="ปิด">✕</button>
+    <div class="modal-icon" id="ruleModalIcon">⚡</div>
+    <p class="modal-title" id="ruleModalTitle">ชื่อเกม</p>
+    <p class="modal-rule" id="ruleModalText">กติกา...</p>
+    <button class="btn btn-gold" id="ruleModalStartBtn" style="width:100%;">เริ่มเลย 🚀</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL — REWARD REMINDER (quick popup from the score badge)
+     ============================================================ -->
+<div class="modal-overlay" id="rewardModal">
+  <div class="modal-box">
+    <button class="modal-close" id="rewardModalClose" aria-label="ปิด">✕</button>
+    <p class="modal-reward-title">ตารางรางวัล 🎁</p>
+    <ul class="reward-list" id="rewardListModal"></ul>
+    <p class="reward-remark" id="rewardRemarkModal"></p>
+  </div>
+</div>
 
 <script>
 /* =========================================================
-   CONFIG — สิ่งที่ต้องแก้ก่อนส่งให้แฟน
+   CONFIG — แก้คำถาม / รูป / รางวัลได้ที่นี่ทั้งหมด
    ========================================================= */
-const CONFIG = {
-  // ใส่ลิงก์รูปแฟน (อัปโหลด imgur แล้วก็อปลิงก์มาวาง) — ตอนนี้ใช้รูปจากหน้าก่อนไปพลางๆ
-  HER_PHOTO: "swiss1.JPG",
 
-  // ข้อความอวยพรของจริง ที่จะโชว์ในหน้าผลลัพธ์
-  WISH_TEXT: "ไม่ว่าคะแนนจะออกมายังไง เค้าก็รักเทอที่สุดอยู่ดีนะ 💗 สู้ๆน้า Swiss",
+// PAGE 4.1 / PAGE 5 — รายชื่อภารกิจทั้ง 5
+const GAMES = [
+  {
+    id: 'g1', num: 1, icon: '⚡', name: 'ถามไวตอบไว', desc: 'ตอบให้ทันก่อนหมดเวลา',
+    rule: 'ตอบคำถามทั้งหมด 10 ข้อ ข้อละ 10 คะแนน มี 4 ตัวเลือก\n\nแต่ละข้อมีเวลา 7 วินาที ถ้าตอบทันจะมีปุ่ม "ข้อต่อไป" ให้กดเอง แต่ถ้าหมดเวลาก่อนตอบ ระบบจะข้ามไปข้อถัดไปให้อัตโนมัติและไม่ได้คะแนนข้อนั้น\n\nตั้งสติให้ดีน้าาา 😆'
+  },
+  {
+    id: 'g2', num: 2, icon: '🧩', name: 'จับคู่ให้ไว', desc: 'พลิกไพ่จับคู่ความทรงจำ',
+    rule: 'ไพ่ทั้งหมด 16 ใบ (8 คู่) วางเป็นกริด 4x4\n\nกดเปิดไพ่ทีละ 2 ใบ ถ้าตรงกันจะจับคู่ติดไว้ ถ้าไม่ตรงจะปิดกลับ เล่นจนจับครบทั้ง 8 คู่\n\nพลิกน้อย = คะแนนสูง พลิกครบ 8 ครั้งพอดี (คือจับถูกทุกคู่ตั้งแต่ครั้งแรก) จะได้เต็ม 100 คะแนน หลังจากนั้นคะแนนจะลดลง 6 แต้มต่อการพลิกที่เกินมาแต่ละครั้ง จนต่ำสุดที่ 30 คะแนน'
+  },
+  {
+    id: 'g3', num: 3, icon: '📍', name: 'นี่ที่ไหน?', desc: 'เปิดภาพแล้วทายสถานที่',
+    rule: 'ภาพลับถูกปิดไว้เป็นกริด 6x6 (36 ช่อง)\n\nเทอมีสิทธิ์เปิดฟรี 5 ช่องแรก หลังจากนั้นเปิดเพิ่มได้เรื่อยๆ แต่ยิ่งเปิดเยอะ คะแนนยิ่งลด (ลด 3 แต้มต่อช่องที่เปิดเพิ่ม ต่ำสุด 20 คะแนน)\n\nกด "รู้แล้ววว!" เมื่อไหร่ก็ได้เพื่อเลือกคำตอบจาก 5 ตัวเลือก ถ้าตอบผิดจะมีโอกาสแก้ตัวอีก 1 ครั้ง (ได้ 50 คะแนนถ้าตอบถูกรอบสอง) ถ้ายังผิดอีกจะได้ 0 คะแนนข้อนี้'
+  },
+  {
+    id: 'g4', num: 4, icon: '🕵️', name: 'ปัญหาเชาว์', desc: 'วัดความรู้รอบตัว',
+    rule: 'คำถามทั้งหมด 10 ข้อ ข้อละ 10 คะแนน มี 4 ตัวเลือก\n\nไม่จำกัดเวลา ค่อยๆคิดได้เลย ตอบถูกได้ 10 ตอบผิดได้ 0'
+  },
+  {
+    id: 'g5', num: 5, icon: '🎯', name: 'แฟนพันธ์แท้พลอย', desc: 'รู้จักพลอยแค่ไหนกันน้า',
+    rule: 'คำถามเกี่ยวกับพลอย 10 ข้อ ข้อละ 10 คะแนน\n\nแต่ละข้อจะมีหน้าอ่านคำถามให้ 3 วินาทีก่อน จากนั้นจะขึ้นตัวเลือกให้เลือกภายใน 3 วินาที กดตอบแล้วจะขึ้นเฉลยทันที ถ้าหมดเวลาไม่ได้ตอบ ก็จะขึ้นเฉลยให้เหมือนกันแต่ไม่ได้คะแนนข้อนั้น'
+  }
+];
 
-  // เปลี่ยนคำถาม/ตัวเลือก/เฉลยให้เป็นเรื่องของคุณสองคน (answer = index ของข้อที่ถูก เริ่มนับจาก 0)
-  QUIZ: [
-    { q: "เราเจอกันครั้งแรกที่ไหน?", options: ["โรงเรียน", "งานเลี้ยงเพื่อน", "ทริปเที่ยว", "ผ่านเพื่อนแนะนำ"], answer: 3 },
-    { q: "ของที่เค้าชอบกินที่สุดคืออะไร?", options: ["ชาบู", "หมูกระทะ", "ของหวาน", "ส้มตำ"], answer: 2 },
-    { q: "ถ้าให้เลือกไปเที่ยวด้วยกัน เค้าอยากไปที่ไหนที่สุด?", options: ["ทะเล", "ภูเขา", "ต่างประเทศ", "ที่ไหนก็ได้ขอให้ไปด้วยกัน"], answer: 3 },
-    { q: "สีที่เค้าชอบที่สุดคือสีอะไร?", options: ["ฟ้า", "ชมพู", "ขาว", "เขียว"], answer: 0 },
-    { q: "วันครบรอบของเราคือวันไหน?", options: ["1 มกราคม", "14 กุมภาพันธ์", "แก้เป็นวันจริงของคุณ", "ยังไม่มี"], answer: 2 }
-  ],
+// PAGE 4.2 — ตารางรางวัลตามคะแนน (แก้ชื่อของรางวัล/ช่วงคะแนนได้ตรงนี้เลย)
+const REWARD_TIERS = [
+  { min: 0,   max: 50,  label: 'กระจอกไป ไม่มีรางวัลจ้า 😌' },
+  { min: 51,  max: 100, label: 'YOLK Egg Tarts (1 pc)' },
+  { min: 101, max: 150, label: 'TWG Macaron (2 pcs)' },
+  { min: 151, max: 200, label: 'Baby Tray Cake (1 pc)' },
+  { min: 201, max: 250, label: 'Kumolab Original Cheesecake (1 pc)' },
+  { min: 251, max: 300, label: 'Parameter (under 300 THB)' },
+  { min: 301, max: 350, label: 'COVA Gelato(s)' },
+  { min: 351, max: 400, label: 'Pang Cha Royal Thai Tea / COVA Tiramisu' },
+  { min: 401, max: 450, label: 'Laoteng 楼顶 — Peking Duck' },
+  { min: 451, max: 500, label: 'Copper Buffet (1499net)' }
+];
+const REWARD_REMARK_TEXT = 'ถ้าอยากเลือกรางวัลเอง สามารถใช้คะแนนแทนมูลค่ารางวัลได้ โดยมูลค่ารางวัลที่เลือกต้องไม่สูงกว่าคะแนนที่ทำได้';
 
-  // เกณฑ์คะแนนที่จะปลดล็อกโค้ดของรางวัลพร้อมคอนเฟตตี้ 🎉
-  PASS_SCORE: 130,
-  REWARD_CODE: "SWISS25LOVE",
-  REWARD_DESC: "ไอศกรีมสเวนเซ่นส์ 1 ถ้วย 🍨",
+// GAME 01 — SPEED QUIZ (10 ข้อ, ข้อละ 10 คะแนน, เวลา 7 วิ/ข้อ)
+const G1_QUESTIONS = [
+  { q: 'เสื้อ AMI ที่พลอยให้สวิส เป็นของขวัญวันอะไร?', options: ['วันเกิด', 'วาเลนไทน์', 'วันครบรอบ', 'วันคริสต์มาส'], answer: 0 },
+  { q: 'วันครบรอบของเราคือวันที่เท่าไหร่?', options: ['25', '26', '27', '28'], answer: 2 },
+  { q: 'เราเจอกันครั้งแรกที่ไหน?', options: ['Nazty', 'CBS by Senior', 'Samyan Mitrtown', 'TDERM'], answer: 3 },
+  { q: 'ทริปแรกของเราคือที่ไหน?', options: ['เชียงใหม่', 'อยุธยา', 'พัทยา', 'บางแสน'], answer: 3 },
+  { q: 'ถ้าพลอยไม่พอใจ พลอยจะ...?', options: ['หายเงียบ', 'บอกตรงๆ', 'คิ้วขมวด', 'รอสวิสง้อ'], answer: 2 },
+  { q: 'First impression ของพลอยตอนรู้จักสวิสคืออะไร?', options: ['หล่อ', 'ลากง่าย', 'พูดรู้เรื่อง', 'สบายใจ'], answer: 1 },
+  { q: 'ถ้าพลอยทำอะไรให้สวิสเสียใจ สิ่งที่สวิสต้องการมากที่สุดคืออะไร?', options: ['การเปลี่ยนพฤติกรรม', 'คำขอโทษ', 'ของขวัญ', 'ให้เวลา'], answer: 0 },
+  { q: 'ที่พลอยเสียน้ำตากับเรื่องไร้สาระ ส่วนใหญ่เป็นเพราะอะไร?', options: ['สวิสขัดใจ', 'พลอยเมนจะมา', 'พลอยคิดมาก', 'สวิสไม่กอด'], answer: 1 },
+  { q: 'ถ้าพลอยเงียบผิดปกติ สวิสควรทำยังไง?', options: ['ไม่ยุ่ง', 'ถามซ้ำจนกว่าจะพูด', 'กอดก่อนแล้วค่อยคุย', 'ปล่อยไว้แล้วค่อยถามทีหลัง'], answer: 2 },
+  { q: 'ถ้าพลอยเครียด พลอยต้องการให้แฟน...?', options: ['ให้คำแนะนำ', 'ให้กำลังใจ', 'อยู่เป็นเพื่อน', 'ให้พลอยอยู่คนเดียว'], answer: 1 }
+];
 
-  // ตารางรางวัลตามช่วงคะแนน (เต็ม 200)
-  REWARD_TIERS: [
-    { min: 0,   max: 50,  label: "ยังไม่ถึงรางวัลน้า ลองใหม่อีกทีน้า 🥺" },
-    { min: 51,  max: 100, label: "ไอติมแมค 🍦" },
-    { min: 101, max: 150, label: "TWG Macaron 1 ชิ้น 🍪" },
-    { min: 151, max: 200, label: "ไอติมสเวนเซ่นส์ 🍨" }
-  ]
+// GAME 02 — MEMORY MATCH emoji pairs
+const MEM_EMOJIS = ['💑', '💕', '😘', '🎂', '🎁', '💍', '📸', '⭐'];
+
+// GAME 03 — WHERE IS THIS (แก้รูป/ตัวเลือก/เฉลยได้ตรงนี้)
+const G3_CONFIG = {
+  image: 'ployswisspuzzle.jpg',
+  options: ['🇯🇵 Japan', '🇸🇬 Singapore', '🇹🇭 Pattaya', '🏬 IconSiam', '🏔️ Chiang Mai'],
+  answerIndex: 1
 };
+
+// GAME 04 — RIDDLES / ความรู้รอบตัว (10 ข้อ, ไม่จำกัดเวลา)
+const G4_QUESTIONS = [
+  { q: 'ทะเลาะกัน ใครควรง้อ?', options: ['คนผิด', 'สวิส', 'พลอย', 'ใครก็ได้'], answer: 1 },
+  { q: 'แต่ความเป็นจริง ใครง้อ?', options: ['คนผิด', 'พลอย', 'สวิส', 'ใครก็ได้'], answer: 1 },
+  { q: '1 ปีในปีอธิกสุรทิน (leap year) มีกี่วัน?', options: ['365', '366', '360', '364'], answer: 1 },
+  { q: 'ดาวเคราะห์ที่อยู่ใกล้ดวงอาทิตย์ที่สุดคือดาวอะไร?', options: ['ศุกร์', 'พุธ', 'อังคาร', 'โลก'], answer: 1 },
+  { q: 'x + 5 = 12 แล้ว x เท่ากับเท่าไหร่?', options: ['5', '6', '7', '8'], answer: 2 },
+  { q: 'สีฟ้าผสมกับสีเหลือง ได้สีอะไร?', options: ['ม่วง', 'เขียว', 'ส้ม', 'น้ำตาล'], answer: 1 },
+  { q: 'อวัยวะใดทำหน้าที่สูบฉีดเลือดในร่างกาย?', options: ['ปอด', 'ตับ', 'หัวใจ', 'ไต'], answer: 2 },
+  { q: 'พลอยกับสวิสมีเงินรวมกัน 100 บาท พลอยมีมากกว่าสวิส 20 บาท พลอยมีเงินกี่บาท?', options: ['40', '50', '60', '70'], answer: 2 },
+  { q: 'เมืองหลวงของประเทศญี่ปุ่นคือเมืองอะไร?', options: ['โอซาก้า', 'เกียวโต', 'โตเกียว', 'นาโกย่า'], answer: 2 },
+  { q: 'ถ้ารักกันจริง ควรให้ "เวลา" หรือ "ของขวัญ" มากกว่ากัน?', options: ['เวลา', 'ของขวัญ', 'เท่ากันทั้งคู่', 'ไม่ต้องให้อะไรเลย'], answer: 0 }
+];
+
+// GAME 05 — แฟนพันธ์แท้พลอย (10 ข้อ, อ่าน 3 วิ + ตอบ 3 วิ)
+// ใส่ swatch: '#สี' ให้ตัวเลือกไหนก็ได้ ถ้าอยากให้ตัวเลือกนั้นมีจุดสีกำกับ
+const G5_QUESTIONS = [
+  { q: 'เบอร์โทรของพลอยคือ 094-924-6531 ใช่หรือไม่?', options: ['ใช่', 'ไม่ใช่ (ลงท้าย 6351)'], answer: 1 },
+  { q: 'พลอยเกิดวันที่มีสีประจำวันเป็นสีอะไร?', options: [{ t: 'สีชมพู', swatch: '#f3c9d6' }, { t: 'สีเหลือง', swatch: '#f6dd8a' }], answer: 0 },
+  { q: 'พลอยชอบสีอะไรมากกว่ากัน?', options: [{ t: 'สีขาว', swatch: '#ffffff' }, { t: 'สีชมพู', swatch: '#f3c9d6' }], answer: 0 },
+  { q: 'พลอยชอบใครมากกว่ากัน?', options: ['คนอื่น', 'สวิส'], answer: 1 },
+  { q: 'ถ้าพลอยเลือกได้ 1 อย่างตอนนี้ พลอยจะเลือกอะไร?', options: ['หมา 🐶', 'เด็กทารก 👶'], answer: 0 },
+  { q: 'อาหารสิ้นคิดของพลอยคืออะไร?', options: ['ขนมปัง', 'หมูปิ้ง'], answer: 1 },
+  { q: 'อะไรที่ทำให้พลอยหายโกรธเร็วที่สุด?', options: ['อธิบายเหตุผล', 'กอดก่อนแล้วค่อยคุย'], answer: 1 },
+  { q: 'ชื่อจริงพลอยสะกดว่า PATCHARAT HOONDE ใช่หรือไม่?', options: ['ใช่', 'ไม่ใช่ (สะกด HOONDEE ตัว E สองตัว)'], answer: 1 },
+  { q: 'พลอยต้องกินยาไทรอยด์กี่วันต่อสัปดาห์?', options: ['5 วัน', '7 วัน'], answer: 0 },
+  { q: 'คำพูดแบบไหนที่พลอยไม่ชอบให้พูดด้วยที่สุด?', options: ['ใจเย็นๆนะ', '(คำหยาบรุนแรง)'], answer: 0 }
+];
 
 /* ========================================================= */
 
-let memMoves = 0, memPairsFound = 0, memLock = false, memFirst = null;
-let memScore = 0, quizScore = 0;
-let quizIndex = 0;
+/* ---------- SCORE SYSTEM (persists via localStorage) ---------- */
+const STORAGE_KEY = 'ployswiss_missionScores_v1';
+let scores = { g1: null, g2: null, g3: null, g4: null, g5: null };
 
-function showFlowScreen(id) {
-  document.querySelectorAll('.flow-screen').forEach((s) => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+function loadScores() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (saved) scores = Object.assign(scores, saved);
+  } catch (e) { /* ignore, start fresh */ }
+}
+function saveScores() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(scores)); } catch (e) { /* ignore */ }
+}
+function totalScore() {
+  return GAMES.reduce((sum, g) => sum + (scores[g.id] || 0), 0);
+}
+function allDone() {
+  return GAMES.every((g) => scores[g.id] !== null);
+}
+function resetScores() {
+  scores = { g1: null, g2: null, g3: null, g4: null, g5: null };
+  saveScores();
 }
 
-/* ---------- intro / reward table ---------- */
-function renderRewardTable() {
-  const table = document.getElementById('rewardTable');
-  table.innerHTML = CONFIG.REWARD_TIERS.map((t) =>
-    `<tr><td class="score-col">${t.min}-${t.max}</td><td>${t.label}</td></tr>`
-  ).join('');
-}
-
-/* ---------- memory match ---------- */
-const MEM_EMOJIS = ['💑', '💕', '😘', '🎂', '🎁', '💍', '📸', '⭐'];
-
-function buildMemoryGame() {
-  const deck = [...MEM_EMOJIS, ...MEM_EMOJIS]
-    .map((e) => ({ e, k: Math.random() }))
-    .sort((a, b) => a.k - b.k)
-    .map((x) => x.e);
-
-  const grid = document.getElementById('memGrid');
-  grid.innerHTML = '';
-  memMoves = 0; memPairsFound = 0; memLock = false; memFirst = null;
-  document.getElementById('memMoves').textContent = 'พลิกไปแล้ว: 0';
-  document.getElementById('memPairs').textContent = 'จับคู่ได้: 0 / 8';
-
-  deck.forEach((emoji, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'mem-card';
-    btn.dataset.emoji = emoji;
-    btn.dataset.idx = i;
-    btn.textContent = '❓';
-    btn.addEventListener('click', () => flipMemCard(btn));
-    grid.appendChild(btn);
-  });
-}
-
-function flipMemCard(btn) {
-  if (memLock || btn.classList.contains('flipped') || btn.classList.contains('matched')) return;
-  btn.classList.add('flipped');
-  btn.textContent = btn.dataset.emoji;
-
-  if (!memFirst) {
-    memFirst = btn;
-    return;
-  }
-
-  memLock = true;
-  memMoves++;
-  document.getElementById('memMoves').textContent = 'พลิกไปแล้ว: ' + memMoves;
-
-  const second = btn;
-  if (memFirst.dataset.emoji === second.dataset.emoji) {
-    memFirst.classList.add('matched');
-    second.classList.add('matched');
-    memPairsFound++;
-    document.getElementById('memPairs').textContent = 'จับคู่ได้: ' + memPairsFound + ' / 8';
-    memFirst = null;
-    memLock = false;
-    if (memPairsFound === 8) {
-      memScore = Math.max(30, Math.min(100, 100 - Math.max(0, memMoves - 8) * 6));
-      setTimeout(() => { startQuiz(); }, 700);
-    }
-  } else {
-    memFirst.classList.add('wrong');
-    second.classList.add('wrong');
-    setTimeout(() => {
-      memFirst.classList.remove('flipped', 'wrong');
-      second.classList.remove('flipped', 'wrong');
-      memFirst.textContent = '❓';
-      second.textContent = '❓';
-      memFirst = null;
-      memLock = false;
-    }, 700);
-  }
-}
-
-/* ---------- quiz ---------- */
-function startQuiz() {
-  quizIndex = 0;
-  quizScore = 0;
-  showFlowScreen('quizScreen');
-  renderQuizProgress();
-  renderQuizQuestion();
-}
-
-function renderQuizProgress() {
-  const wrap = document.getElementById('quizProgress');
-  wrap.innerHTML = CONFIG.QUIZ.map((_, i) => {
-    let cls = 'quiz-dot';
-    if (i < quizIndex) cls += ' done';
-    else if (i === quizIndex) cls += ' active';
-    return `<span class="${cls}"></span>`;
-  }).join('');
-}
-
-function renderQuizQuestion() {
-  const item = CONFIG.QUIZ[quizIndex];
-  document.getElementById('quizQuestion').textContent = item.q;
-  const optWrap = document.getElementById('quizOptions');
-  optWrap.innerHTML = '';
-  item.options.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'quiz-opt';
-    btn.textContent = opt;
-    btn.addEventListener('click', () => answerQuiz(i, btn));
-    optWrap.appendChild(btn);
-  });
-}
-
-function answerQuiz(i, btn) {
-  const item = CONFIG.QUIZ[quizIndex];
-  document.querySelectorAll('.quiz-opt').forEach((b) => b.classList.add('disabled'));
-  if (i === item.answer) {
-    btn.classList.add('correct');
-    quizScore += 20;
-  } else {
-    btn.classList.add('incorrect');
-    optWrap_showCorrect(item.answer);
-  }
-  renderQuizProgress();
-  setTimeout(() => {
-    quizIndex++;
-    if (quizIndex >= CONFIG.QUIZ.length) {
-      renderQuizProgress();
-      showResults();
-    } else {
-      renderQuizQuestion();
-    }
-  }, 850);
-}
-
-function optWrap_showCorrect(correctIndex) {
-  const opts = document.querySelectorAll('.quiz-opt');
-  opts[correctIndex].classList.add('correct');
-}
-
-/* ---------- results ---------- */
 function findTier(score) {
-  return CONFIG.REWARD_TIERS.find((t) => score >= t.min && score <= t.max) || CONFIG.REWARD_TIERS[0];
+  return REWARD_TIERS.find((t) => score >= t.min && score <= t.max) || REWARD_TIERS[0];
 }
 
-function showResults() {
-  const total = memScore + quizScore;
-  showFlowScreen('resultScreen');
-  document.getElementById('scoreBig').textContent = total + ' / 200';
-  document.getElementById('scoreSub').textContent =
-    'จับคู่ ' + memScore + ' คะแนน + ควิซ ' + quizScore + ' คะแนน';
-
-  const tier = findTier(total);
-  document.getElementById('rewardLabel').textContent = tier.label;
-  document.getElementById('rewardPhoto').src = CONFIG.HER_PHOTO;
-  document.getElementById('wishNote').textContent = CONFIG.WISH_TEXT;
-
-  const passed = total >= CONFIG.PASS_SCORE;
-  document.getElementById('rewardCodeBox').style.display = passed ? 'block' : 'none';
-  document.getElementById('retryBtn').style.display = passed ? 'none' : 'inline-block';
-
-  if (passed) {
-    document.getElementById('rewardCode').textContent = CONFIG.REWARD_CODE;
-    launchConfetti();
-  }
+function updateScoreBadge() {
+  const badge = document.getElementById('scoreBadge');
+  document.getElementById('scoreBadgeVal').textContent = totalScore();
+  badge.classList.toggle('show', screenHistory[screenHistory.length - 1] !== 'msIntro');
 }
 
+/* ---------- small helpers: toast / feedback / points / confetti ---------- */
+function showToast(text) {
+  const t = document.createElement('div');
+  t.className = 'toast-banner';
+  t.textContent = text;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 1650);
+}
+function showFeedback(correct) {
+  const f = document.createElement('div');
+  f.className = 'feedback-badge ' + (correct ? 'correct' : 'wrong');
+  f.textContent = correct ? 'ถูกต้อง! ✓' : 'พลาดไปนิด ✗';
+  document.body.appendChild(f);
+  setTimeout(() => f.remove(), 780);
+}
+function showPoints(n) {
+  if (n <= 0) return;
+  const p = document.createElement('div');
+  p.className = 'points-pop';
+  p.textContent = '+' + n + ' POINTS';
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 950);
+}
+function showCombo(streak) {
+  if (streak < 2) return;
+  const c = document.createElement('div');
+  c.className = 'combo-badge';
+  c.textContent = '🔥 Combo x' + streak;
+  document.body.appendChild(c);
+  setTimeout(() => c.remove(), 950);
+}
 function launchConfetti() {
   const colors = ['#cfe7f5', '#ffe9c9', '#f2c7c2', '#dff0f8', '#e6b45a'];
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 46; i++) {
     const piece = document.createElement('div');
     piece.className = 'confetti-piece';
     piece.style.left = Math.random() * 100 + 'vw';
@@ -460,22 +753,579 @@ function launchConfetti() {
     setTimeout(() => piece.remove(), 4200);
   }
 }
+function animateCount(el, from, to, duration) {
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min(1, (now - start) / duration);
+    el.textContent = Math.round(from + (to - from) * p);
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
 
-/* ---------- wiring ---------- */
+/* ========= NAVIGATION HISTORY (same standard back-button convention as index.html) ========= */
+let screenHistory = ['msIntro'];
+
+function updateBackButton() {
+  // always visible in this file — from msIntro it exits back to index.html
+  updateScoreBadge();
+}
+
+function pushHistory(id) {
+  screenHistory.push(id);
+  updateBackButton();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.flow-screen').forEach((s) => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  updateBackButton();
+}
+
+function goBack() {
+  const current = screenHistory[screenHistory.length - 1];
+  // leaving a game mid-play: stop its timers before navigating away
+  stopAllGameTimers();
+
+  if (screenHistory.length < 2) {
+    // first screen of this file -> go back to the previous file
+    const overlay = document.getElementById('pageOverlay');
+    overlay.style.pointerEvents = 'auto';
+    overlay.classList.remove('hide');
+    overlay.style.opacity = '1';
+    setTimeout(() => { window.location.href = 'index.html'; }, 420);
+    return;
+  }
+  screenHistory.pop();
+  const prev = screenHistory[screenHistory.length - 1];
+  showScreen(prev);
+}
+
+function goForward(id) {
+  pushHistory(id);
+  showScreen(id);
+}
+
+function stopAllGameTimers() {
+  clearInterval(g1Timer); clearInterval(g5Timer);
+}
+
+/* ========= PAGE 4.1 MISSION MENU ========= */
+function renderMissionList() {
+  const ul = document.getElementById('msMissionList');
+  ul.innerHTML = GAMES.map((g) =>
+    `<li><span class="m-num">${String(g.num).padStart(2, '0')}</span><span class="m-icon">${g.icon}</span><span class="m-body">${g.name}</span><span class="m-pts">100 PTS</span></li>`
+  ).join('');
+}
+
+/* ========= PAGE 4.2 REWARD RULES ========= */
+function renderRewardList(targetId) {
+  const ul = document.getElementById(targetId);
+  ul.innerHTML = REWARD_TIERS.map((t) =>
+    `<li><span class="r-range">${t.min}-${t.max}</span><span class="r-name">${t.label}</span></li>`
+  ).join('');
+}
+
+/* ========= PAGE 5 GAME HUB ========= */
+function renderHub() {
+  const list = document.getElementById('gameList');
+  list.innerHTML = GAMES.map((g) => {
+    const done = scores[g.id] !== null;
+    const status = done ? (scores[g.id] + ' / 100 ✓') : 'ยังไม่เล่น';
+    return `<button class="game-card ${done ? 'completed' : ''}" data-game="${g.id}">
+      <span class="g-icon">${g.icon}</span>
+      <span class="g-info"><span class="g-name">${String(g.num).padStart(2, '0')} ${g.name}</span><span class="g-desc">${g.desc}</span></span>
+      <span class="g-status">${status}</span>
+    </button>`;
+  }).join('');
+
+  list.querySelectorAll('.game-card').forEach((card) => {
+    card.addEventListener('click', () => openRuleModal(card.dataset.game));
+  });
+
+  const total = totalScore();
+  document.getElementById('hubTotalScore').textContent = total + ' / 500';
+  document.getElementById('hubProgressFill').style.width = (total / 500 * 100) + '%';
+  document.getElementById('hubHint').textContent = allDone()
+    ? 'ครบทั้ง 5 ภารกิจแล้ว เก่งมากกก 🎉'
+    : 'เล่นให้ครบ 5 ภารกิจเพื่อดูรางวัลรวมน้า 💗';
+}
+
+/* ---------- rule modal (shared shape for every game) ---------- */
+let pendingGameId = null;
+function openRuleModal(gameId) {
+  const g = GAMES.find((x) => x.id === gameId);
+  pendingGameId = gameId;
+  document.getElementById('ruleModalIcon').textContent = g.icon;
+  document.getElementById('ruleModalTitle').textContent = String(g.num).padStart(2, '0') + ' ' + g.name;
+  document.getElementById('ruleModalText').innerHTML = g.rule.split('\n\n').map((p) => '<p style="margin:0 0 10px;">' + p + '</p>').join('');
+  document.getElementById('ruleModal').classList.add('show');
+}
+function closeRuleModal() {
+  document.getElementById('ruleModal').classList.remove('show');
+}
+
+function startPendingGame() {
+  const gameId = pendingGameId;
+  closeRuleModal();
+  showToast('MISSION START 🚀');
+  goForward(gameId + 'Screen');
+  if (gameId === 'g1') startG1();
+  if (gameId === 'g2') startG2();
+  if (gameId === 'g3') startG3();
+  if (gameId === 'g4') startG4();
+  if (gameId === 'g5') startG5();
+}
+
+/* ---------- finishing any game funnels through here ---------- */
+function finishGame(gameId, score) {
+  scores[gameId] = score;
+  saveScores();
+  const g = GAMES.find((x) => x.id === gameId);
+
+  document.getElementById('grIcon').textContent = score >= 70 ? '🎉' : (score >= 40 ? '👍' : '🥲');
+  document.getElementById('grTitle').textContent = g.name.toUpperCase() + ' — COMPLETE!';
+  document.getElementById('grSub').textContent = 'เก็บเข้ากระเป๋าคะแนนแล้วน้า ไปต่อภารกิจอื่นกันเลย';
+  goForward('gameResultScreen');
+
+  const scoreEl = document.getElementById('grScore');
+  scoreEl.textContent = '0 / 100';
+  setTimeout(() => {
+    let shown = { v: 0 };
+    animateCount({ set textContent(v) { scoreEl.textContent = v + ' / 100'; } }, 0, score, 700);
+  }, 150);
+  showPoints(score);
+}
+
+document.getElementById('grContinueBtn').addEventListener('click', () => {
+  // pop back to hub; if everything is done, offer the final summary instead
+  screenHistory = screenHistory.filter((s) => s !== 'gameResultScreen');
+  if (screenHistory[screenHistory.length - 1] !== 'hub') screenHistory.push('hub');
+  renderHub();
+  showScreen('hub');
+  if (allDone()) {
+    setTimeout(() => {
+      if (confirm('เล่นครบ 5 ภารกิจแล้ว! ไปดูผลรวมกันเลยมั้ย? 🎉')) {
+        goForward('finalResultScreen');
+        renderFinalResult();
+      }
+    }, 300);
+  }
+});
+
+/* ========= GAME 01 — SPEED QUIZ ========= */
+let g1Index = 0, g1Score = 0, g1Timer = null, g1Answered = false, g1Streak = 0;
+
+function startG1() {
+  g1Index = 0; g1Score = 0; g1Streak = 0;
+  renderG1Question();
+}
+function renderG1Question() {
+  clearInterval(g1Timer);
+  g1Answered = false;
+  document.getElementById('g1NextWrap').style.display = 'none';
+  document.getElementById('g1Count').textContent = (g1Index + 1) + ' / ' + G1_QUESTIONS.length;
+  const item = G1_QUESTIONS[g1Index];
+  document.getElementById('g1Question').textContent = item.q;
+
+  const optWrap = document.getElementById('g1Options');
+  optWrap.innerHTML = '';
+  item.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => answerG1(i, btn));
+    optWrap.appendChild(btn);
+  });
+
+  let remaining = 7000;
+  const fill = document.getElementById('g1TimerFill');
+  fill.style.transition = 'none';
+  fill.style.width = '100%';
+  g1Timer = setInterval(() => {
+    remaining -= 100;
+    fill.style.transition = 'width 100ms linear';
+    fill.style.width = Math.max(0, remaining / 7000 * 100) + '%';
+    if (remaining <= 0) {
+      clearInterval(g1Timer);
+      if (!g1Answered) timeoutG1();
+    }
+  }, 100);
+}
+function answerG1(i, btn) {
+  if (g1Answered) return;
+  g1Answered = true;
+  clearInterval(g1Timer);
+  const item = G1_QUESTIONS[g1Index];
+  document.querySelectorAll('#g1Options .quiz-opt').forEach((b) => b.classList.add('disabled'));
+  if (i === item.answer) {
+    btn.classList.add('correct');
+    g1Score += 10; g1Streak++;
+    showFeedback(true); showPoints(10); showCombo(g1Streak);
+  } else {
+    btn.classList.add('incorrect');
+    document.querySelectorAll('#g1Options .quiz-opt')[item.answer].classList.add('correct');
+    g1Streak = 0;
+    showFeedback(false);
+  }
+  document.getElementById('g1NextWrap').style.display = 'block';
+}
+function timeoutG1() {
+  g1Answered = true;
+  g1Streak = 0;
+  const item = G1_QUESTIONS[g1Index];
+  document.querySelectorAll('#g1Options .quiz-opt').forEach((b) => b.classList.add('disabled'));
+  document.querySelectorAll('#g1Options .quiz-opt')[item.answer].classList.add('correct');
+  showFeedback(false);
+  setTimeout(() => nextG1(), 900);
+}
+function nextG1() {
+  g1Index++;
+  if (g1Index >= G1_QUESTIONS.length) {
+    finishGame('g1', g1Score);
+  } else {
+    renderG1Question();
+  }
+}
+document.getElementById('g1NextBtn').addEventListener('click', nextG1);
+
+/* ========= GAME 02 — MEMORY MATCH ========= */
+let g2Moves = 0, g2PairsFound = 0, g2Lock = false, g2First = null;
+
+function startG2() {
+  const deck = [...MEM_EMOJIS, ...MEM_EMOJIS]
+    .map((e) => ({ e, k: Math.random() }))
+    .sort((a, b) => a.k - b.k)
+    .map((x) => x.e);
+
+  const grid = document.getElementById('g2Grid');
+  grid.innerHTML = '';
+  g2Moves = 0; g2PairsFound = 0; g2Lock = false; g2First = null;
+  document.getElementById('g2Moves').textContent = 'พลิกไปแล้ว: 0';
+  document.getElementById('g2Pairs').textContent = 'จับคู่ได้: 0 / 8';
+
+  deck.forEach((emoji) => {
+    const btn = document.createElement('button');
+    btn.className = 'mem-card';
+    btn.dataset.emoji = emoji;
+    btn.textContent = '❓';
+    btn.addEventListener('click', () => flipG2(btn));
+    grid.appendChild(btn);
+  });
+}
+function flipG2(btn) {
+  if (g2Lock || btn.classList.contains('flipped') || btn.classList.contains('matched')) return;
+  btn.classList.add('flipped');
+  btn.textContent = btn.dataset.emoji;
+  if (!g2First) { g2First = btn; return; }
+
+  g2Lock = true;
+  g2Moves++;
+  document.getElementById('g2Moves').textContent = 'พลิกไปแล้ว: ' + g2Moves;
+
+  const second = btn;
+  if (g2First.dataset.emoji === second.dataset.emoji) {
+    g2First.classList.add('matched'); second.classList.add('matched');
+    g2PairsFound++;
+    document.getElementById('g2Pairs').textContent = 'จับคู่ได้: ' + g2PairsFound + ' / 8';
+    g2First = null; g2Lock = false;
+    if (g2PairsFound === 8) {
+      const score = Math.max(30, Math.min(100, 100 - Math.max(0, g2Moves - 8) * 6));
+      setTimeout(() => finishGame('g2', score), 600);
+    }
+  } else {
+    g2First.classList.add('wrong'); second.classList.add('wrong');
+    setTimeout(() => {
+      g2First.classList.remove('flipped', 'wrong'); second.classList.remove('flipped', 'wrong');
+      g2First.textContent = '❓'; second.textContent = '❓';
+      g2First = null; g2Lock = false;
+    }, 650);
+  }
+}
+
+/* ========= GAME 03 — WHERE IS THIS? ========= */
+let g3Opened = 0, g3Guessed = false, g3SecondChance = false;
+
+function startG3() {
+  g3Opened = 0; g3Guessed = false; g3SecondChance = false;
+  document.getElementById('g3Img').src = G3_CONFIG.image;
+  document.getElementById('g3Options').style.display = 'none';
+  document.getElementById('g3Options').innerHTML = '';
+  document.getElementById('g3ActionWrap').style.display = 'flex';
+
+  const grid = document.getElementById('g3Grid');
+  grid.innerHTML = '';
+  const cells = [];
+  for (let i = 0; i < 36; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'puzzle-cell';
+    cell.dataset.idx = i;
+    cell.addEventListener('click', () => openG3Cell(cell));
+    grid.appendChild(cell);
+    cells.push(cell);
+  }
+  // free reveal of 5 random cells
+  const shuffled = [...cells].sort(() => Math.random() - 0.5);
+  shuffled.slice(0, 5).forEach((c) => { c.classList.add('opened'); g3Opened++; });
+  updateG3Status();
+}
+function openG3Cell(cell) {
+  if (g3Guessed || cell.classList.contains('opened')) return;
+  cell.classList.add('opened');
+  g3Opened++;
+  updateG3Status();
+}
+function updateG3Status() {
+  document.getElementById('g3Status').textContent = 'เปิดไปแล้ว ' + g3Opened + ' / 36 ช่อง';
+}
+document.getElementById('g3GuessBtn').addEventListener('click', () => {
+  document.getElementById('g3ActionWrap').style.display = 'none';
+  const optWrap = document.getElementById('g3Options');
+  optWrap.style.display = 'flex';
+  optWrap.innerHTML = '';
+  G3_CONFIG.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => answerG3(i, btn));
+    optWrap.appendChild(btn);
+  });
+});
+function answerG3(i, btn) {
+  const opts = document.querySelectorAll('#g3Options .quiz-opt');
+  opts.forEach((b) => b.classList.add('disabled'));
+  if (i === G3_CONFIG.answerIndex) {
+    btn.classList.add('correct');
+    showFeedback(true);
+    const score = g3SecondChance ? 50 : Math.max(20, Math.min(100, 100 - Math.max(0, g3Opened - 5) * 3));
+    g3Guessed = true;
+    setTimeout(() => finishGame('g3', score), 700);
+  } else if (!g3SecondChance) {
+    btn.classList.add('incorrect');
+    showFeedback(false);
+    g3SecondChance = true;
+    setTimeout(() => {
+      opts.forEach((b) => { b.classList.remove('disabled', 'incorrect'); });
+    }, 700);
+  } else {
+    btn.classList.add('incorrect');
+    opts[G3_CONFIG.answerIndex].classList.add('correct');
+    showFeedback(false);
+    g3Guessed = true;
+    setTimeout(() => finishGame('g3', 0), 900);
+  }
+}
+
+/* ========= GAME 04 — RIDDLES (no timer) ========= */
+let g4Index = 0, g4Score = 0;
+
+function startG4() {
+  g4Index = 0; g4Score = 0;
+  renderG4Question();
+}
+function renderG4Question() {
+  document.getElementById('g4NextWrap').style.display = 'none';
+  document.getElementById('g4Count').textContent = (g4Index + 1) + ' / ' + G4_QUESTIONS.length;
+  document.getElementById('g4ProgressFill').style.width = ((g4Index) / G4_QUESTIONS.length * 100) + '%';
+  const item = G4_QUESTIONS[g4Index];
+  document.getElementById('g4Question').textContent = item.q;
+
+  const optWrap = document.getElementById('g4Options');
+  optWrap.innerHTML = '';
+  item.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => answerG4(i, btn));
+    optWrap.appendChild(btn);
+  });
+}
+function answerG4(i, btn) {
+  const item = G4_QUESTIONS[g4Index];
+  document.querySelectorAll('#g4Options .quiz-opt').forEach((b) => b.classList.add('disabled'));
+  if (i === item.answer) {
+    btn.classList.add('correct');
+    g4Score += 10;
+    showFeedback(true); showPoints(10);
+  } else {
+    btn.classList.add('incorrect');
+    document.querySelectorAll('#g4Options .quiz-opt')[item.answer].classList.add('correct');
+    showFeedback(false);
+  }
+  document.getElementById('g4NextWrap').style.display = 'block';
+}
+function nextG4() {
+  g4Index++;
+  if (g4Index >= G4_QUESTIONS.length) {
+    document.getElementById('g4ProgressFill').style.width = '100%';
+    finishGame('g4', g4Score);
+  } else {
+    renderG4Question();
+  }
+}
+document.getElementById('g4NextBtn').addEventListener('click', nextG4);
+
+/* ========= GAME 05 — GUESS PLOY (read 3s, answer 3s) ========= */
+let g5Index = 0, g5Score = 0, g5Timer = null, g5Stage = 'read';
+
+function startG5() {
+  g5Index = 0; g5Score = 0;
+  renderG5Read();
+}
+function renderG5Read() {
+  clearInterval(g5Timer);
+  g5Stage = 'read';
+  document.getElementById('g5Count').textContent = (g5Index + 1) + ' / ' + G5_QUESTIONS.length;
+  document.getElementById('g5Question').textContent = G5_QUESTIONS[g5Index].q;
+  document.getElementById('g5Options').style.display = 'none';
+  document.getElementById('g5Options').innerHTML = '';
+  document.getElementById('g5NextWrap').style.display = 'none';
+  runG5Timer(3000, () => renderG5Answer());
+}
+function renderG5Answer() {
+  clearInterval(g5Timer);
+  g5Stage = 'answer';
+  const item = G5_QUESTIONS[g5Index];
+  const optWrap = document.getElementById('g5Options');
+  optWrap.style.display = 'flex';
+  optWrap.innerHTML = '';
+  item.options.forEach((opt, i) => {
+    const isObj = typeof opt === 'object';
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    if (isObj && opt.swatch) {
+      btn.innerHTML = '<span class="swatch" style="background:' + opt.swatch + '"></span>' + opt.t;
+    } else {
+      btn.textContent = isObj ? opt.t : opt;
+    }
+    btn.addEventListener('click', () => answerG5(i, btn));
+    optWrap.appendChild(btn);
+  });
+  runG5Timer(3000, () => timeoutG5());
+}
+function runG5Timer(duration, onDone) {
+  let remaining = duration;
+  const fill = document.getElementById('g5TimerFill');
+  fill.style.transition = 'none';
+  fill.style.width = '100%';
+  g5Timer = setInterval(() => {
+    remaining -= 100;
+    fill.style.transition = 'width 100ms linear';
+    fill.style.width = Math.max(0, remaining / duration * 100) + '%';
+    if (remaining <= 0) { clearInterval(g5Timer); onDone(); }
+  }, 100);
+}
+function answerG5(i, btn) {
+  clearInterval(g5Timer);
+  const item = G5_QUESTIONS[g5Index];
+  document.querySelectorAll('#g5Options .quiz-opt').forEach((b) => b.classList.add('disabled'));
+  if (i === item.answer) {
+    btn.classList.add('correct');
+    g5Score += 10;
+    showFeedback(true); showPoints(10);
+  } else {
+    btn.classList.add('incorrect');
+    document.querySelectorAll('#g5Options .quiz-opt')[item.answer].classList.add('correct');
+    showFeedback(false);
+  }
+  document.getElementById('g5NextWrap').style.display = 'block';
+}
+function timeoutG5() {
+  const item = G5_QUESTIONS[g5Index];
+  document.querySelectorAll('#g5Options .quiz-opt').forEach((b) => b.classList.add('disabled'));
+  document.querySelectorAll('#g5Options .quiz-opt')[item.answer].classList.add('correct');
+  showFeedback(false);
+  document.getElementById('g5NextWrap').style.display = 'block';
+}
+function nextG5() {
+  g5Index++;
+  if (g5Index >= G5_QUESTIONS.length) {
+    finishGame('g5', g5Score);
+  } else {
+    renderG5Read();
+  }
+}
+document.getElementById('g5NextBtn').addEventListener('click', nextG5);
+
+/* ========= PAGE 4.2 (RESULT) — FINAL SUMMARY ========= */
+function renderFinalResult() {
+  const total = totalScore();
+  document.getElementById('finalTotal').textContent = '0 / 500';
+  animateCount({ set textContent(v) { document.getElementById('finalTotal').textContent = v + ' / 500'; } }, 0, total, 900);
+  document.getElementById('finalProgressFill').style.width = (total / 500 * 100) + '%';
+
+  const list = document.getElementById('breakdownList');
+  list.innerHTML = GAMES.map((g) => {
+    const s = scores[g.id];
+    return `<li><span>${g.icon} ${g.name}</span><span class="b-score ${s !== null ? 'done' : ''}">${s !== null ? s : '-'} / 100</span></li>`;
+  }).join('');
+
+  const tier = findTier(total);
+  document.getElementById('finalRewardLabel').textContent = tier.label;
+  document.getElementById('finalRewardRemark').textContent = REWARD_REMARK_TEXT;
+
+  launchConfetti();
+}
+
+/* ========= WIRING ========= */
 window.addEventListener('DOMContentLoaded', () => {
+  loadScores();
   const overlay = document.getElementById('pageOverlay');
   requestAnimationFrame(() => { overlay.classList.add('hide'); });
 
-  renderRewardTable();
+  renderMissionList();
+  renderRewardList('rewardList');
+  renderRewardList('rewardListModal');
+  document.getElementById('rewardRemark').textContent = REWARD_REMARK_TEXT;
+  document.getElementById('rewardRemarkModal').textContent = REWARD_REMARK_TEXT;
 
-  document.getElementById('startMissionBtn').addEventListener('click', () => {
-    showFlowScreen('memoryScreen');
-    buildMemoryGame();
+  document.getElementById('globalBackBtn').addEventListener('click', goBack);
+  updateBackButton();
+
+  document.getElementById('toRewardBtn').addEventListener('click', () => goForward('msReward'));
+
+  document.getElementById('readyBtn').addEventListener('click', () => {
+    const sign = document.createElement('div');
+    sign.className = 'sign-burst';
+    sign.innerHTML = '🍀<span>ขอให้โชคดีน้าอิอิ</span>';
+    document.body.appendChild(sign);
+    setTimeout(() => {
+      sign.remove();
+      renderHub();
+      goForward('hub');
+    }, 950);
   });
 
-  document.getElementById('retryBtn').addEventListener('click', () => {
-    showFlowScreen('introScreen');
+  document.getElementById('scoreBadge').addEventListener('click', () => {
+    document.getElementById('rewardModal').classList.add('show');
   });
+  document.getElementById('rewardModalClose').addEventListener('click', () => {
+    document.getElementById('rewardModal').classList.remove('show');
+  });
+  document.getElementById('viewRewardFromHubBtn').addEventListener('click', () => {
+    document.getElementById('rewardModal').classList.add('show');
+  });
+
+  document.getElementById('resetAllBtn').addEventListener('click', () => {
+    if (confirm('รีเซ็ตคะแนนทั้งหมดและเริ่มใหม่ตั้งแต่ต้นเลยนะ?')) {
+      resetScores();
+      screenHistory = ['msIntro'];
+      showScreen('msIntro');
+    }
+  });
+  document.getElementById('finalResetBtn').addEventListener('click', () => {
+    if (confirm('รีเซ็ตคะแนนทั้งหมดและเริ่มใหม่ตั้งแต่ต้นเลยนะ?')) {
+      resetScores();
+      screenHistory = ['msIntro'];
+      showScreen('msIntro');
+    }
+  });
+
+  document.getElementById('ruleModalClose').addEventListener('click', closeRuleModal);
+  document.getElementById('ruleModalStartBtn').addEventListener('click', startPendingGame);
+  document.getElementById('g3GuessBtn'); // already wired above
+
+  updateScoreBadge();
 });
 </script>
 
