@@ -262,6 +262,13 @@
   .quiz-opt.correct { border-color: var(--good); background: #eafaf0; }
   .quiz-opt.incorrect { border-color: var(--bad); background: #fdecec; }
   .quiz-opt.disabled { pointer-events: none; }
+  .quiz-options.horizontal { flex-direction: row; }
+  .quiz-options.horizontal .quiz-opt { flex: 1 1 0; justify-content: center; text-align: center; }
+  .g5-fact {
+    font-family: 'Quicksand', sans-serif; font-size: 10.5px; color: var(--warm-brown);
+    margin-top: 10px; opacity: 0; transition: opacity 300ms ease; line-height: 1.6;
+  }
+  .g5-fact.show { opacity: 0.9; }
 
   .next-btn-wrap { margin-top: 6px; }
 
@@ -332,8 +339,8 @@
     box-shadow: 0 12px 28px rgba(51,82,107,0.18);
   }
   .puzzle-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .puzzle-grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr); }
-  .puzzle-cell { background: rgba(207,231,245,0.97); border: 0.5px solid rgba(255,255,255,0.35); cursor: pointer; transition: opacity 250ms ease; }
+  .puzzle-grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); }
+  .puzzle-cell { background: var(--soft-blue); border: 0.5px solid rgba(255,255,255,0.35); cursor: pointer; transition: opacity 250ms ease; }
   .puzzle-cell.opened { opacity: 0; pointer-events: none; }
   .puzzle-status { font-family: 'Quicksand'; font-size: 11px; color: var(--warm-brown); margin-bottom: 8px; }
   .puzzle-actions { display: flex; gap: 8px; justify-content: center; margin-bottom: 10px; }
@@ -462,7 +469,7 @@
       <span id="g2Pairs">จับคู่ได้: 0 / 8</span>
     </div>
     <div class="mem-grid" id="g2Grid"></div>
-    <p class="mem-rate-note">พลิกครบ 8 ครั้งพอดี = 100 คะแนน หลังจากนั้นลด 6 แต้ม/ครั้ง (ต่ำสุด 30)</p>
+    <p class="mem-rate-note">พลิกครบ 8 ครั้งพอดี = 100 คะแนน หลังจากนั้นลด 5 แต้ม/ครั้ง (ต่ำสุด 40)</p>
   </div>
 </section>
 
@@ -472,7 +479,7 @@
 <section class="flow-screen" id="g3Screen">
   <div class="wrap">
     <div class="game-header">📍 นี่ที่ไหน?</div>
-    <p class="puzzle-status" id="g3Status">เปิดไปแล้ว 5 / 36 ช่อง (ฟรี 5 ช่องแรก)</p>
+    <p class="puzzle-status" id="g3Status">มีสิทธิ์เปิดฟรี 5 ช่อง — แตะช่องเพื่อเปิดได้เลย (0 / 64)</p>
     <div class="puzzle-wrap">
       <img class="puzzle-img" id="g3Img" src="ployswisspuzzle.jpg" alt="สถานที่ลับ">
       <div class="puzzle-grid" id="g3Grid"></div>
@@ -508,6 +515,7 @@
     <div class="timer-track"><div class="timer-fill" id="g5TimerFill"></div></div>
     <p class="quiz-q" id="g5Question"></p>
     <div class="quiz-options" id="g5Options" style="display:none;"></div>
+    <p class="g5-fact" id="g5Fact"></p>
     <div class="next-btn-wrap" id="g5NextWrap" style="display:none;">
       <button class="btn btn-sm" id="g5NextBtn">ข้อต่อไป →</button>
     </div>
@@ -547,6 +555,7 @@
       <p class="reward-remark" style="margin-top:8px;" id="finalRewardRemark"></p>
     </div>
 
+    <button class="btn btn-gold" id="finalContinueBtn" style="margin-bottom:10px;">ไปต่อกันเลย 💌</button>
     <button class="btn btn-outline btn-sm" id="finalResetBtn">เริ่มใหม่ทั้งหมด ↺</button>
   </div>
 </section>
@@ -589,11 +598,11 @@ const GAMES = [
   },
   {
     id: 'g2', num: 2, icon: '🧩', name: 'จับคู่ให้ไว', desc: 'พลิกไพ่จับคู่ความทรงจำ',
-    rule: 'ไพ่ทั้งหมด 16 ใบ (8 คู่) วางเป็นกริด 4x4\n\nกดเปิดไพ่ทีละ 2 ใบ ถ้าตรงกันจะจับคู่ติดไว้ ถ้าไม่ตรงจะปิดกลับ เล่นจนจับครบทั้ง 8 คู่\n\nพลิกน้อย = คะแนนสูง พลิกครบ 8 ครั้งพอดี (คือจับถูกทุกคู่ตั้งแต่ครั้งแรก) จะได้เต็ม 100 คะแนน หลังจากนั้นคะแนนจะลดลง 6 แต้มต่อการพลิกที่เกินมาแต่ละครั้ง จนต่ำสุดที่ 30 คะแนน'
+    rule: 'ไพ่ทั้งหมด 16 ใบ (8 คู่) วางเป็นกริด 4x4\n\nกดเปิดไพ่ทีละ 2 ใบ ถ้าตรงกันจะจับคู่ติดไว้ ถ้าไม่ตรงจะปิดกลับ เล่นจนจับครบทั้ง 8 คู่\n\nพลิกน้อย = คะแนนสูง พลิกครบ 8 ครั้งพอดี (คือจับถูกทุกคู่ตั้งแต่ครั้งแรก) จะได้เต็ม 100 คะแนน หลังจากนั้นคะแนนจะลดลง 5 แต้มต่อการพลิกที่เกินมาแต่ละครั้ง จนต่ำสุดที่ 40 คะแนน'
   },
   {
     id: 'g3', num: 3, icon: '📍', name: 'นี่ที่ไหน?', desc: 'เปิดภาพแล้วทายสถานที่',
-    rule: 'ภาพลับถูกปิดไว้เป็นกริด 6x6 (36 ช่อง)\n\nเทอมีสิทธิ์เปิดฟรี 5 ช่องแรก หลังจากนั้นเปิดเพิ่มได้เรื่อยๆ แต่ยิ่งเปิดเยอะ คะแนนยิ่งลด (ลด 3 แต้มต่อช่องที่เปิดเพิ่ม ต่ำสุด 20 คะแนน)\n\nกด "รู้แล้ววว!" เมื่อไหร่ก็ได้เพื่อเลือกคำตอบจาก 5 ตัวเลือก ถ้าตอบผิดจะมีโอกาสแก้ตัวอีก 1 ครั้ง (ได้ 50 คะแนนถ้าตอบถูกรอบสอง) ถ้ายังผิดอีกจะได้ 0 คะแนนข้อนี้'
+    rule: 'ภาพลับถูกปิดทึบไว้ทั้งหมด เป็นกริด 8x8 (64 ช่อง) — ไม่เห็นรูปเลยตั้งแต่แรก\n\nเทอมีสิทธิ์เปิดช่องเอง 5 ช่องฟรี หลังจากนั้นเปิดเพิ่มได้เรื่อยๆ แต่ยิ่งเปิดเยอะ คะแนนยิ่งลด (ลด 2 แต้มต่อช่องที่เปิดเกิน 5 ช่อง ต่ำสุด 20 คะแนน)\n\nกด "รู้แล้ววว!" เมื่อไหร่ก็ได้เพื่อเลือกคำตอบจาก 5 ตัวเลือก ถ้าตอบผิดจะมีโอกาสแก้ตัวอีก 1 ครั้ง (ได้ 50 คะแนนถ้าตอบถูกรอบสอง) ถ้ายังผิดอีกจะได้ 0 คะแนนข้อนี้'
   },
   {
     id: 'g4', num: 4, icon: '🕵️', name: 'ปัญหาเชาว์', desc: 'วัดความรู้รอบตัว',
@@ -650,25 +659,25 @@ const G4_QUESTIONS = [
   { q: 'แต่ความเป็นจริง ใครง้อ?', options: ['คนผิด', 'พลอย', 'สวิส', 'ใครก็ได้'], answer: 1 },
   { q: '1 ปีในปีอธิกสุรทิน (leap year) มีกี่วัน?', options: ['365', '366', '360', '364'], answer: 1 },
   { q: 'ดาวเคราะห์ที่อยู่ใกล้ดวงอาทิตย์ที่สุดคือดาวอะไร?', options: ['ศุกร์', 'พุธ', 'อังคาร', 'โลก'], answer: 1 },
-  { q: 'x + 5 = 12 แล้ว x เท่ากับเท่าไหร่?', options: ['5', '6', '7', '8'], answer: 2 },
-  { q: 'สีฟ้าผสมกับสีเหลือง ได้สีอะไร?', options: ['ม่วง', 'เขียว', 'ส้ม', 'น้ำตาล'], answer: 1 },
-  { q: 'อวัยวะใดทำหน้าที่สูบฉีดเลือดในร่างกาย?', options: ['ปอด', 'ตับ', 'หัวใจ', 'ไต'], answer: 2 },
+  { q: 'ถ้า x² - 5x + 6 = 0 แล้วค่า x ที่เป็นไปได้คือข้อใด?', options: ['x = 2 หรือ x = 3', 'x = 1 หรือ x = 6', 'x = -2 หรือ x = -3', 'x = 0 หรือ x = 5'], answer: 0 },
+  { q: 'ธนาคารแห่งประเทศไทย (ธปท.) ทำหน้าที่หลักด้านใด?', options: ['ควบคุมนโยบายการเงิน', 'ขายประกันชีวิต', 'ปล่อยกู้รายย่อยโดยตรง', 'ขายทองคำแท่ง'], answer: 0 },
+  { q: '"ดอกเบี้ยทบต้น" (compound interest) หมายถึงอะไร?', options: ['ดอกเบี้ยคงที่เท่าเดิมทุกปี', 'ดอกเบี้ยคิดจากเงินต้น+ดอกเบี้ยที่สะสมไว้', 'ดอกเบี้ยที่ธนาคารไม่คิด', 'ดอกเบี้ยที่ลดลงทุกปีอัตโนมัติ'], answer: 1 },
   { q: 'พลอยกับสวิสมีเงินรวมกัน 100 บาท พลอยมีมากกว่าสวิส 20 บาท พลอยมีเงินกี่บาท?', options: ['40', '50', '60', '70'], answer: 2 },
-  { q: 'เมืองหลวงของประเทศญี่ปุ่นคือเมืองอะไร?', options: ['โอซาก้า', 'เกียวโต', 'โตเกียว', 'นาโกย่า'], answer: 2 },
-  { q: 'ถ้ารักกันจริง ควรให้ "เวลา" หรือ "ของขวัญ" มากกว่ากัน?', options: ['เวลา', 'ของขวัญ', 'เท่ากันทั้งคู่', 'ไม่ต้องให้อะไรเลย'], answer: 0 }
+  { q: 'ภาษีเงินได้บุคคลธรรมดา (แบบกระดาษ) ต้องยื่นภายในเดือนอะไรของทุกปี?', options: ['ธันวาคม', 'มกราคม', 'มีนาคม', 'มิถุนายน'], answer: 2 },
+  { q: 'ถ้ามีคนพูดไม่ดีถึงพลอย สวิสควรจะ...?', options: ['หัวเราะกลบเกลื่อน', 'เงียบเพราะไม่อยากมีปัญหา', 'ด่ากลับทันที', 'ปกป้องแฟนอย่างเหมาะสม'], answer: 3 }
 ];
 
 // GAME 05 — แฟนพันธ์แท้พลอย (10 ข้อ, อ่าน 3 วิ + ตอบ 3 วิ)
 // ใส่ swatch: '#สี' ให้ตัวเลือกไหนก็ได้ ถ้าอยากให้ตัวเลือกนั้นมีจุดสีกำกับ
 const G5_QUESTIONS = [
-  { q: 'เบอร์โทรของพลอยคือ 094-924-6531 ใช่หรือไม่?', options: ['ใช่', 'ไม่ใช่ (ลงท้าย 6351)'], answer: 1 },
+  { q: 'เบอร์โทรของพลอยคือ 094-924-6531 ใช่หรือไม่?', options: ['ใช่', 'ไม่ใช่'], answer: 1, fact: 'จริงๆ แล้วเบอร์พลอยลงท้ายด้วย 6351 น้า 😆' },
   { q: 'พลอยเกิดวันที่มีสีประจำวันเป็นสีอะไร?', options: [{ t: 'สีชมพู', swatch: '#f3c9d6' }, { t: 'สีเหลือง', swatch: '#f6dd8a' }], answer: 0 },
   { q: 'พลอยชอบสีอะไรมากกว่ากัน?', options: [{ t: 'สีขาว', swatch: '#ffffff' }, { t: 'สีชมพู', swatch: '#f3c9d6' }], answer: 0 },
-  { q: 'พลอยชอบใครมากกว่ากัน?', options: ['คนอื่น', 'สวิส'], answer: 1 },
-  { q: 'ถ้าพลอยเลือกได้ 1 อย่างตอนนี้ พลอยจะเลือกอะไร?', options: ['หมา 🐶', 'เด็กทารก 👶'], answer: 0 },
+  { q: 'ความสุขของพลอยคืออะไร?', options: ['จุ๊บสวิส', 'สวิสจุ๊บ'], answer: 1 },
+  { q: 'ใครรักใครมากกว่ากัน?', options: ['สวิสรักพลอย', 'พลอยรักสวิส'], answer: 0 },
   { q: 'อาหารสิ้นคิดของพลอยคืออะไร?', options: ['ขนมปัง', 'หมูปิ้ง'], answer: 1 },
   { q: 'อะไรที่ทำให้พลอยหายโกรธเร็วที่สุด?', options: ['อธิบายเหตุผล', 'กอดก่อนแล้วค่อยคุย'], answer: 1 },
-  { q: 'ชื่อจริงพลอยสะกดว่า PATCHARAT HOONDE ใช่หรือไม่?', options: ['ใช่', 'ไม่ใช่ (สะกด HOONDEE ตัว E สองตัว)'], answer: 1 },
+  { q: 'ชื่อจริงพลอยสะกดว่า PATCHARAT HOONDE ใช่หรือไม่?', options: ['ใช่', 'ไม่ใช่'], answer: 1, fact: 'สะกดที่ถูกต้องคือ HOONDEE (ตัว E สองตัว) น้า' },
   { q: 'พลอยต้องกินยาไทรอยด์กี่วันต่อสัปดาห์?', options: ['5 วัน', '7 วัน'], answer: 0 },
   { q: 'คำพูดแบบไหนที่พลอยไม่ชอบให้พูดด้วยที่สุด?', options: ['ใจเย็นๆนะ', '(คำหยาบรุนแรง)'], answer: 0 }
 ];
@@ -840,7 +849,14 @@ function renderHub() {
   }).join('');
 
   list.querySelectorAll('.game-card').forEach((card) => {
-    card.addEventListener('click', () => openRuleModal(card.dataset.game));
+    card.addEventListener('click', () => {
+      const gid = card.dataset.game;
+      if (scores[gid] !== null) {
+        showSavedResult(gid, false);
+      } else {
+        openRuleModal(gid);
+      }
+    });
   });
 
   const total = totalScore();
@@ -881,26 +897,41 @@ function startPendingGame() {
 function finishGame(gameId, score) {
   scores[gameId] = score;
   saveScores();
+  showSavedResult(gameId, true);
+}
+
+/* Show a game's result screen — used both right after finishing, and when
+   re-opening an already-completed game card from the hub. History is kept
+   clean: the transient play-screen entry is swapped out for the result
+   entry, so the back button always goes result -> hub -> ... reliably. */
+function showSavedResult(gameId, justFinished) {
   const g = GAMES.find((x) => x.id === gameId);
+  const score = scores[gameId] || 0;
 
   document.getElementById('grIcon').textContent = score >= 70 ? '🎉' : (score >= 40 ? '👍' : '🥲');
   document.getElementById('grTitle').textContent = g.name.toUpperCase() + ' — COMPLETE!';
-  document.getElementById('grSub').textContent = 'เก็บเข้ากระเป๋าคะแนนแล้วน้า ไปต่อภารกิจอื่นกันเลย';
+  document.getElementById('grSub').textContent = justFinished
+    ? 'เก็บเข้ากระเป๋าคะแนนแล้วน้า ไปต่อภารกิจอื่นกันเลย'
+    : 'ภารกิจนี้เล่นจบไปแล้วนะ กดต่อเพื่อกลับไปเลือกภารกิจอื่น';
+
+  // swap the play-screen entry for the result entry so history stays 1 level deep
+  const playScreenId = gameId + 'Screen';
+  if (screenHistory[screenHistory.length - 1] === playScreenId) {
+    screenHistory.pop();
+  }
   goForward('gameResultScreen');
 
   const scoreEl = document.getElementById('grScore');
   scoreEl.textContent = '0 / 100';
   setTimeout(() => {
-    let shown = { v: 0 };
     animateCount({ set textContent(v) { scoreEl.textContent = v + ' / 100'; } }, 0, score, 700);
   }, 150);
-  showPoints(score);
+  if (justFinished) showPoints(score);
 }
 
 document.getElementById('grContinueBtn').addEventListener('click', () => {
-  // pop back to hub; if everything is done, offer the final summary instead
-  screenHistory = screenHistory.filter((s) => s !== 'gameResultScreen');
-  if (screenHistory[screenHistory.length - 1] !== 'hub') screenHistory.push('hub');
+  // history is now always [...,'hub','gameResultScreen'] — pop cleanly back to hub
+  if (screenHistory[screenHistory.length - 1] === 'gameResultScreen') screenHistory.pop();
   renderHub();
   showScreen('hub');
   if (allDone()) {
@@ -1030,7 +1061,7 @@ function flipG2(btn) {
     document.getElementById('g2Pairs').textContent = 'จับคู่ได้: ' + g2PairsFound + ' / 8';
     g2First = null; g2Lock = false;
     if (g2PairsFound === 8) {
-      const score = Math.max(30, Math.min(100, 100 - Math.max(0, g2Moves - 8) * 6));
+      const score = Math.max(40, Math.min(100, 100 - Math.max(0, g2Moves - 8) * 5));
       setTimeout(() => finishGame('g2', score), 600);
     }
   } else {
@@ -1043,7 +1074,8 @@ function flipG2(btn) {
   }
 }
 
-/* ========= GAME 03 — WHERE IS THIS? ========= */
+/* ========= GAME 03 — WHERE IS THIS? (8x8 = 64 cells, all closed, 5 free manual opens) ========= */
+const G3_FREE_OPENS = 5;
 let g3Opened = 0, g3Guessed = false, g3SecondChance = false;
 
 function startG3() {
@@ -1055,18 +1087,13 @@ function startG3() {
 
   const grid = document.getElementById('g3Grid');
   grid.innerHTML = '';
-  const cells = [];
-  for (let i = 0; i < 36; i++) {
+  for (let i = 0; i < 64; i++) {
     const cell = document.createElement('div');
     cell.className = 'puzzle-cell';
     cell.dataset.idx = i;
     cell.addEventListener('click', () => openG3Cell(cell));
     grid.appendChild(cell);
-    cells.push(cell);
   }
-  // free reveal of 5 random cells
-  const shuffled = [...cells].sort(() => Math.random() - 0.5);
-  shuffled.slice(0, 5).forEach((c) => { c.classList.add('opened'); g3Opened++; });
   updateG3Status();
 }
 function openG3Cell(cell) {
@@ -1076,7 +1103,10 @@ function openG3Cell(cell) {
   updateG3Status();
 }
 function updateG3Status() {
-  document.getElementById('g3Status').textContent = 'เปิดไปแล้ว ' + g3Opened + ' / 36 ช่อง';
+  const remainFree = Math.max(0, G3_FREE_OPENS - g3Opened);
+  document.getElementById('g3Status').textContent = remainFree > 0
+    ? 'เปิดฟรีเหลือ ' + remainFree + ' ช่อง (เปิดไปแล้ว ' + g3Opened + ' / 64)'
+    : 'เปิดไปแล้ว ' + g3Opened + ' / 64 ช่อง — เปิดเพิ่มคะแนนจะเริ่มลดน้า';
 }
 document.getElementById('g3GuessBtn').addEventListener('click', () => {
   document.getElementById('g3ActionWrap').style.display = 'none';
@@ -1097,7 +1127,7 @@ function answerG3(i, btn) {
   if (i === G3_CONFIG.answerIndex) {
     btn.classList.add('correct');
     showFeedback(true);
-    const score = g3SecondChance ? 50 : Math.max(20, Math.min(100, 100 - Math.max(0, g3Opened - 5) * 3));
+    const score = g3SecondChance ? 50 : Math.max(20, Math.min(100, 100 - Math.max(0, g3Opened - G3_FREE_OPENS) * 2));
     g3Guessed = true;
     setTimeout(() => finishGame('g3', score), 700);
   } else if (!g3SecondChance) {
@@ -1188,7 +1218,11 @@ function renderG5Answer() {
   const item = G5_QUESTIONS[g5Index];
   const optWrap = document.getElementById('g5Options');
   optWrap.style.display = 'flex';
+  optWrap.classList.add('horizontal');
   optWrap.innerHTML = '';
+  const factEl = document.getElementById('g5Fact');
+  factEl.textContent = '';
+  factEl.classList.remove('show');
   item.options.forEach((opt, i) => {
     const isObj = typeof opt === 'object';
     const btn = document.createElement('button');
@@ -1228,6 +1262,7 @@ function answerG5(i, btn) {
     document.querySelectorAll('#g5Options .quiz-opt')[item.answer].classList.add('correct');
     showFeedback(false);
   }
+  revealG5Fact(item);
   document.getElementById('g5NextWrap').style.display = 'block';
 }
 function timeoutG5() {
@@ -1235,7 +1270,15 @@ function timeoutG5() {
   document.querySelectorAll('#g5Options .quiz-opt').forEach((b) => b.classList.add('disabled'));
   document.querySelectorAll('#g5Options .quiz-opt')[item.answer].classList.add('correct');
   showFeedback(false);
+  revealG5Fact(item);
   document.getElementById('g5NextWrap').style.display = 'block';
+}
+function revealG5Fact(item) {
+  const factEl = document.getElementById('g5Fact');
+  if (item.fact) {
+    factEl.textContent = '💡 ' + item.fact;
+    factEl.classList.add('show');
+  }
 }
 function nextG5() {
   g5Index++;
@@ -1313,6 +1356,14 @@ window.addEventListener('DOMContentLoaded', () => {
       showScreen('msIntro');
     }
   });
+  document.getElementById('finalContinueBtn').addEventListener('click', () => {
+    const overlay = document.getElementById('pageOverlay');
+    overlay.style.pointerEvents = 'auto';
+    overlay.classList.remove('hide');
+    overlay.style.opacity = '1';
+    setTimeout(() => { window.location.href = 'index3.html'; }, 520);
+  });
+
   document.getElementById('finalResetBtn').addEventListener('click', () => {
     if (confirm('รีเซ็ตคะแนนทั้งหมดและเริ่มใหม่ตั้งแต่ต้นเลยนะ?')) {
       resetScores();
