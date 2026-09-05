@@ -54,6 +54,45 @@
     transition: opacity 520ms ease;
   }
 
+  /* ---------- standard global back button (top-left, every page except the very first) ---------- */
+  .global-back {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 14px);
+    left: 14px;
+    z-index: 10000;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.88);
+    color: var(--dark-blue);
+    font-size: 17px;
+    line-height: 1;
+    box-shadow: 0 6px 16px rgba(51, 82, 107, 0.18);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s ease;
+  }
+  .global-back.show { display: flex; }
+  .global-back:active { transform: scale(0.9); }
+
+  .forgot-cap {
+    display: block;
+    margin: 12px auto 0;
+    background: none;
+    border: none;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 11px;
+    color: var(--warm-brown);
+    text-decoration: underline;
+    opacity: 0.75;
+    cursor: pointer;
+    padding: 4px;
+  }
+
   /* one-shot "sign" burst when the prayer button is pressed */
   .pray-burst{
     position: fixed; inset: 0;
@@ -598,6 +637,7 @@
 <body>
 
 <div id="pageOverlay"></div>
+<button class="global-back" id="globalBackBtn" type="button" aria-label="ย้อนกลับ">←</button>
 
 <div id="page1">
   <div class="glow glow-1"></div>
@@ -772,6 +812,7 @@
         <button class="send-btn btn-not-yet" onclick="notSentYet()">ยังไม่ส่ง 🥺</button>
         <button class="send-btn btn-sent" onclick="sentAlready()">ส่งแล้ว 💌</button>
       </div>
+      <button class="forgot-cap" type="button" onclick="forgotCap()">อ้าว ลืมแคปหน้าจอไว้ 😳</button>
     </div>
   </section>
 
@@ -785,6 +826,7 @@
         <button class="send-btn btn-not-yet" onclick="notSentAgain()">ยังไม่ส่ง 🥺</button>
         <button class="send-btn btn-sent" onclick="sentAlready()">ส่งแล้วค่า 💌</button>
       </div>
+      <button class="forgot-cap" type="button" onclick="forgotCap()">อ้าว ลืมแคปหน้าจอไว้ 😳</button>
     </div>
   </section>
 
@@ -794,8 +836,8 @@
       <div class="send-card">
         <div class="send-emoji">🎉</div>
         <h2 class="send-title">เก่งมากกกก 💗</h2>
-        <p class="send-text">ขอบคุณที่ส่งให้พลอยนะ</p>
-        <img src="swissgengmak.HEIC" alt="Swiss จุ๊บๆ">
+        <p class="send-text">แบบนี้ค่อยน่ารักหน่อยย 🥹<br>ขอบคุณที่ส่งให้พลอยนะ</p>
+        <img src="swissgengmak.jpg" alt="Swiss จุ๊บๆ">
       </div>
       <button class="btn-continue btn-pray" style="margin-top:18px;" onclick="goToIndex2()">ไปทำภารกิจกันต่อ 🎁</button>
     </div>
@@ -836,6 +878,66 @@
     }, 460);
   }
 
+  /* ========= GLOBAL BACK NAVIGATION (standard top-left back button) =========
+     screenHistory keeps every screen the user has visited, in order.
+     Ids look like 'page1', 'page2', or 'page3:rankScreen' / 'page3:sendStep2' etc. */
+  let screenHistory = ['page1'];
+
+  function updateBackButton() {
+    document.getElementById('globalBackBtn').classList.toggle('show', screenHistory.length > 1);
+  }
+
+  function pushHistory(id) {
+    screenHistory.push(id);
+    updateBackButton();
+  }
+
+  function showFlowScreen(id) {
+    document.querySelectorAll('#page3 .flow-screen').forEach((s) => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function resetPageAnim(el) {
+    el.classList.remove('fading-out', 'fading-in');
+    el.style.removeProperty('opacity');
+    el.style.removeProperty('transform');
+  }
+
+  function renderScreen(id) {
+    const p1 = document.getElementById('page1');
+    const p2 = document.getElementById('page2');
+    const p3 = document.getElementById('page3');
+    resetPageAnim(p1);
+    resetPageAnim(p2);
+
+    if (id.indexOf('page3:') === 0) {
+      p1.style.display = 'none';
+      p2.style.display = 'none';
+      p3.style.display = 'block';
+      showFlowScreen(id.slice(6));
+    } else {
+      p3.style.display = 'none';
+      p1.style.display = id === 'page1' ? 'flex' : 'none';
+      p2.style.display = id === 'page2' ? 'flex' : 'none';
+      if (id === 'page1') p1.classList.add('fading-in');
+      if (id === 'page2') p2.classList.add('fading-in');
+    }
+  }
+
+  function goBack() {
+    if (screenHistory.length < 2) return;
+    screenHistory.pop();
+    const prev = screenHistory[screenHistory.length - 1];
+    renderScreen(prev);
+    updateBackButton();
+  }
+
+  /* "ลืมแคป" — sent flow forgot to screenshot, go back to the ranking results */
+  function forgotCap() {
+    pushHistory('page3:rankScreen');
+    showFlowScreen('rankScreen');
+  }
+
   /* "สาธุ" burst sign, then continue to page 3 */
   function prayAndContinue() {
     const burst = document.createElement('div');
@@ -845,6 +947,7 @@
     setTimeout(() => {
       burst.remove();
       goToPage(document.getElementById('page2'), document.getElementById('page3'));
+      pushHistory('page3:rankScreen');
     }, 900);
   }
 
@@ -872,8 +975,12 @@
     setTimeout(() => { date.classList.add('show'); }, 2150);
     setTimeout(() => { cta.classList.add('show'); }, 2600);
 
+    updateBackButton();
+    document.getElementById('globalBackBtn').addEventListener('click', goBack);
+
     cta.addEventListener('click', () => {
       goToPage(document.getElementById('page1'), document.getElementById('page2'));
+      pushHistory('page2');
     });
 
     const toPage3Btn = document.getElementById('toPage3');
@@ -970,6 +1077,7 @@
     /* ========= SEND FLOW ========= */
     window.goToSendStep2 = function () {
       showFlowScreen('sendStep2');
+      pushHistory('page3:sendStep2');
       let count = 5;
       const countdown = document.getElementById('countdown');
       countdown.textContent = count;
@@ -978,19 +1086,17 @@
         countdown.textContent = count;
         if (count <= 0) {
           clearInterval(timer);
-          setTimeout(() => { showFlowScreen('sendStep3'); }, 400);
+          setTimeout(() => {
+            showFlowScreen('sendStep3');
+            pushHistory('page3:sendStep3');
+          }, 400);
         }
       }, 1000);
     };
 
-    window.notSentYet = function () { showFlowScreen('sendStep4'); };
-    window.notSentAgain = function () { showFlowScreen('sendStep3'); };
-    window.sentAlready = function () { showFlowScreen('sendStep5'); };
-
-    function showFlowScreen(id) {
-      document.querySelectorAll('#page3 .flow-screen').forEach((s) => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-    }
+    window.notSentYet = function () { showFlowScreen('sendStep4'); pushHistory('page3:sendStep4'); };
+    window.notSentAgain = function () { showFlowScreen('sendStep3'); pushHistory('page3:sendStep3'); };
+    window.sentAlready = function () { showFlowScreen('sendStep5'); pushHistory('page3:sendStep5'); };
   });
 </script>
 
