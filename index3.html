@@ -80,7 +80,7 @@
   @keyframes popIn { to { opacity: 1; transform: translateY(0) scale(1); } }
 
   .heading {
-    font-family: 'Caveat', cursive; font-weight: 700; font-size: 42px; line-height: 1.2;
+    font-family: 'Mali', cursive; font-weight: 650; font-size: 35px; line-height: 1.2;
     color: var(--dark-blue); margin: 0 0 8px; opacity: 0; transform: translateY(14px);
   }
   .heading.show { animation: fadeUp 600ms ease forwards; }
@@ -95,7 +95,7 @@
   @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
   .polaroid {
-    width: 220px; background: var(--white); padding: 12px 12px 34px; border-radius: 5px;
+    width: 260px; background: var(--white); padding: 12px 12px 34px; border-radius: 5px;
     box-shadow: 0 16px 34px var(--shadow); transform: rotate(-4deg) translateY(20px); opacity: 0;
     margin-bottom: 26px;
   }
@@ -103,7 +103,7 @@
   @keyframes polaroidIn { to { opacity: 1; transform: rotate(-4deg) translateY(0); } }
 
   .polaroid .frame {
-    width: 100%; height: 220px; border-radius: 2px; overflow: hidden;
+    width: 100%; height: 210px; border-radius: 2px; overflow: hidden;
     background: linear-gradient(135deg, var(--soft-blue), #f3e3cf);
     display: flex; align-items: center; justify-content: center;
   }
@@ -116,12 +116,12 @@
     margin-top: 10px;
   }
 
-  .btn-row { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 260px; opacity: 0; transform: translateY(10px); }
+  .btn-row { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 200px; opacity: 0; transform: translateY(10px); }
   .btn-row.show { animation: fadeUp 600ms ease forwards; }
 
   .btn {
-    border: none; border-radius: 999px; padding: 14px 24px;
-    font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 14.5px;
+    border: none; border-radius: 999px; padding: 12px 20px;
+    font-family: 'Quicksand', sans-serif; font-weight: 650; font-size: 13px;
     color: var(--dark-blue); box-shadow: 0 10px 22px var(--shadow);
     cursor: pointer; transition: transform 0.2s ease; width: 100%;
   }
