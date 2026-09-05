@@ -1028,17 +1028,17 @@
     let rankCount = 0;
 
     function checkRankComplete() {
-      rankDone.classList.toggle('show', rankCount === 10);
+      rankDone.classList.toggle('show', rankCount === 9);
     }
 
     function toggleRank(item) {
       if (item.dataset.rank) {
-        const removed = parseInt(item.dataset.rank, 10);
+        const removed = parseInt(item.dataset.rank, 9);
         delete item.dataset.rank;
         item.classList.remove('ranked');
         item.querySelector('.rank-badge').textContent = '✦';
         rankList.querySelectorAll('.rank-item[data-rank]').forEach((el) => {
-          const r = parseInt(el.dataset.rank, 10);
+          const r = parseInt(el.dataset.rank, 9);
           if (r > removed) {
             const newR = r - 1;
             el.dataset.rank = newR;
