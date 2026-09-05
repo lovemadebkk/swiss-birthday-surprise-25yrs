@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>ยินดีด้วยน้า 🎉 Swiss</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Mali:wght@400;500;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --soft-blue: #cfe7f5;
+    --soft-blue-2: #eaf5fb;
+    --cream: #fbf3e6;
+    --white: #ffffff;
+    --dark-blue: #33526b;
+    --warm-brown: #9c7b5c;
+    --gold: #e6b45a;
+    --shadow: rgba(51, 82, 107, 0.18);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0; width: 100%; overflow-x: hidden;
+    background: linear-gradient(180deg, var(--soft-blue-2) 0%, var(--cream) 65%, var(--cream) 100%);
+    font-family: 'Quicksand', sans-serif;
+    color: var(--dark-blue);
+  }
+
+  #pageOverlay{
+    position: fixed; inset: 0;
+    background: linear-gradient(180deg, var(--soft-blue-2), var(--cream));
+    opacity: 1; pointer-events: none;
+    z-index: 9999;
+    transition: opacity 620ms ease;
+  }
+  #pageOverlay.hide { opacity: 0; }
+
+  .global-back {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 14px);
+    left: 14px;
+    z-index: 9980;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.88);
+    color: var(--dark-blue);
+    font-size: 17px; line-height: 1;
+    box-shadow: 0 6px 16px rgba(51, 82, 107, 0.18);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: transform 0.2s ease;
+  }
+  .global-back:active { transform: scale(0.9); }
+
+  .glow {
+    position: absolute; border-radius: 50%; filter: blur(40px); opacity: 0.5; pointer-events: none;
+  }
+  .glow-1 { width: 220px; height: 220px; background: var(--soft-blue); top: -60px; left: -60px; }
+  .glow-2 { width: 240px; height: 240px; background: #ffe9c9; bottom: -70px; right: -60px; opacity: 0.4; }
+
+  .sparkle {
+    position: absolute; width: 6px; height: 6px; background: var(--white); border-radius: 50%;
+    box-shadow: 0 0 6px 2px rgba(255,255,255,0.9); opacity: 0;
+  }
+  @keyframes sparkleTwinkle {
+    0% { opacity: 0; transform: scale(0.4); }
+    40% { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 0; transform: scale(0.6); }
+  }
+
+  #page {
+    position: relative;
+    min-height: 100svh; width: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 60px 22px 40px; overflow: hidden; text-align: center;
+  }
+
+  .celebrate-icon { font-size: 40px; margin-bottom: 6px; opacity: 0; transform: translateY(10px) scale(0.9); }
+  .celebrate-icon.show { animation: popIn 650ms cubic-bezier(.25,1.5,.5,1) forwards; }
+  @keyframes popIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  .heading {
+    font-family: 'Caveat', cursive; font-weight: 700; font-size: 42px; line-height: 1.2;
+    color: var(--dark-blue); margin: 0 0 8px; opacity: 0; transform: translateY(14px);
+  }
+  .heading.show { animation: fadeUp 600ms ease forwards; }
+
+  .subtext {
+    font-family: 'Mali', cursive; font-weight: 600; font-size: clamp(14px, 4.2vw, 17px);
+    line-height: 1.7; color: var(--dark-blue); margin: 0 0 22px; max-width: 320px;
+    opacity: 0; transform: translateY(12px);
+  }
+  .subtext.show { animation: fadeUp 600ms ease forwards; }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .polaroid {
+    width: 220px; background: var(--white); padding: 12px 12px 34px; border-radius: 5px;
+    box-shadow: 0 16px 34px var(--shadow); transform: rotate(-4deg) translateY(20px); opacity: 0;
+    margin-bottom: 26px;
+  }
+  .polaroid.show { animation: polaroidIn 700ms cubic-bezier(.2,.8,.3,1) forwards; }
+  @keyframes polaroidIn { to { opacity: 1; transform: rotate(-4deg) translateY(0); } }
+
+  .polaroid .frame {
+    width: 100%; height: 220px; border-radius: 2px; overflow: hidden;
+    background: linear-gradient(135deg, var(--soft-blue), #f3e3cf);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .polaroid .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .polaroid .frame .placeholder-text {
+    font-size: 12px; color: var(--dark-blue); opacity: 0.55; padding: 10px; text-align: center; line-height: 1.5;
+  }
+  .polaroid .caption {
+    font-family: 'Caveat', cursive; font-weight: 700; font-size: 18px; color: var(--dark-blue);
+    margin-top: 10px;
+  }
+
+  .btn-row { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 260px; opacity: 0; transform: translateY(10px); }
+  .btn-row.show { animation: fadeUp 600ms ease forwards; }
+
+  .btn {
+    border: none; border-radius: 999px; padding: 14px 24px;
+    font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 14.5px;
+    color: var(--dark-blue); box-shadow: 0 10px 22px var(--shadow);
+    cursor: pointer; transition: transform 0.2s ease; width: 100%;
+  }
+  .btn:active { transform: scale(0.95); }
+  .btn-primary { background: linear-gradient(135deg, #ffe9c9, #fff6e6); box-shadow: 0 12px 26px rgba(230,180,90,0.35); }
+  .btn-secondary { background: linear-gradient(135deg, var(--soft-blue), #dff0f8); }
+
+  .confetti-piece {
+    position: fixed; top: -10px; width: 8px; height: 14px; opacity: 0.9;
+    animation: confettiFall linear forwards; z-index: 20;
+  }
+  @keyframes confettiFall { to { transform: translateY(110vh) rotate(540deg); opacity: 0.2; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="pageOverlay"></div>
+<button class="global-back" id="globalBackBtn" type="button" aria-label="ย้อนกลับ">←</button>
+
+<div id="page">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div id="sparkles"></div>
+
+  <div class="celebrate-icon" id="celebrateIcon">🎉</div>
+  <h1 class="heading" id="heading">ยินดีด้วยน้าาา!</h1>
+  <p class="subtext" id="subtext">ครบทั้ง 5 ภารกิจเรียบร้อยยย 🥳<br>เดี๋ยวเค้าพาเทอไปเลี้ยงฉลองน้า 🍽️💕</p>
+
+  <div class="polaroid" id="polaroid">
+    <div class="frame">
+      <img src="swissgengmak.HEIC" alt="รูปคู่เรา"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="placeholder-text" style="display:none; align-items:center; justify-content:center;">
+        ใส่รูปคู่เราที่นี่<br>(swissgengmak.HEIC)
+      </div>
+    </div>
+    <div class="caption">us 💗</div>
+  </div>
+
+  <div class="btn-row" id="btnRow">
+    <button class="btn btn-primary" id="replayBtn">❤️ เล่นอีกครั้ง</button>
+    <button class="btn btn-secondary" id="homeBtn">🏠 กลับหน้าหลัก</button>
+  </div>
+</div>
+
+<script>
+function makeSparkles() {
+  const container = document.getElementById('sparkles');
+  const positions = [
+    { x: '15%', y: '18%' }, { x: '82%', y: '15%' }, { x: '75%', y: '35%' },
+    { x: '20%', y: '38%' }, { x: '50%', y: '10%' }
+  ];
+  positions.forEach((p, i) => {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = p.x;
+    s.style.top = p.y;
+    s.style.animation = `sparkleTwinkle 1400ms ease ${500 + i * 140}ms forwards`;
+    container.appendChild(s);
+  });
+}
+function launchConfetti() {
+  const colors = ['#cfe7f5', '#ffe9c9', '#f2c7c2', '#dff0f8', '#e6b45a'];
+  for (let i = 0; i < 40; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDuration = (2.2 + Math.random() * 1.6) + 's';
+    piece.style.animationDelay = (Math.random() * 0.4) + 's';
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 4200);
+  }
+}
+
+function goToIndex(url) {
+  const overlay = document.getElementById('pageOverlay');
+  overlay.style.pointerEvents = 'auto';
+  overlay.classList.remove('hide');
+  overlay.style.opacity = '1';
+  setTimeout(() => { window.location.href = url; }, 480);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('pageOverlay');
+  requestAnimationFrame(() => { overlay.classList.add('hide'); });
+
+  makeSparkles();
+  launchConfetti();
+
+  setTimeout(() => document.getElementById('celebrateIcon').classList.add('show'), 200);
+  setTimeout(() => document.getElementById('heading').classList.add('show'), 550);
+  setTimeout(() => document.getElementById('subtext').classList.add('show'), 950);
+  setTimeout(() => document.getElementById('polaroid').classList.add('show'), 1350);
+  setTimeout(() => document.getElementById('btnRow').classList.add('show'), 1900);
+
+  document.getElementById('globalBackBtn').addEventListener('click', () => goToIndex('index2.html'));
+
+  document.getElementById('replayBtn').addEventListener('click', () => {
+    try { localStorage.removeItem('ployswiss_missionScores_v1'); } catch (e) { /* ignore */ }
+    goToIndex('index2.html');
+  });
+
+  document.getElementById('homeBtn').addEventListener('click', () => {
+    goToIndex('index.html');
+  });
+});
+</script>
+
+</body>
+</html>
